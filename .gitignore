@@ -8,3 +8,6 @@
 /.idea/modules.xml
 /.env
 /.idea/vcs.xml
+/.idea/dataSources.xml
+/.idea/milk-service.iml
+/apps/authentication/migrations/0001_initial.py

@@ -101,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'authentication.User'
 
-AUTHENTICATION_BACKENDS = ['apps.authentication.backends.EmailBackend']
+# AUTHENTICATION_BACKENDS = ['apps.authentication.backends.EmailBackend']
 
 # REST_FRAMEWORK
 REST_FRAMEWORK = {
