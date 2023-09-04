@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from apps.tools.models import CompanyType, Region, District
+
+admin.site.register(CompanyType)
+admin.site.register(Region)
+admin.site.register(District)
