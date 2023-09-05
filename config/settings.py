@@ -23,9 +23,10 @@ ALLOWED_HOSTS = ['*']
 
 # CSRF TRUSTS
 CSRF_TRUSTED_ORIGINS = [
-    'https://milk-django.abd-kabir.repl.co/',
-    'http://localhost:8000/',
-    'http://127.0.0.1:8000/',
+    # 'https://milk-django.abd-kabir.repl.co/',
+    'https://milk-django.abd-kabir.repl.co',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
 
 # Application definition
