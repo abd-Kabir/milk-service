@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.authentication.models import User, UserLegalEntity, UserIndividual
+from apps.tools.models import Region, District, CompanyType
 
 
 class JWTObtainPairSerializer(TokenObtainPairSerializer):
@@ -44,38 +45,61 @@ class SignUpPersonalDataSerializer(serializers.Serializer):
 
         return user
 
-# class RegisterSerializer(serializers.ModelSerializer):
-#     email = serializers.EmailField(
-#         required=True,
-#         validators=[UniqueValidator(queryset=User.objects.all())]
-#     )
-#
-#     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-#     password2 = serializers.CharField(write_only=True, required=True)
-#
-#     class Meta:
-#         model = User
-#         fields = ('email', 'password', 'password2', 'first_name', 'last_name')
-#         extra_kwargs = {
-#             'first_name': {'required': True},
-#             'last_name': {'required': True}
-#         }
-#
-#     def validate(self, attrs):
-#         if attrs['password'] != attrs['password2']:
-#             raise serializers.ValidationError({"password": "Password fields didn't match."})
-#
-#         return attrs
-#
-#     def create(self, validated_data):
-#         user = User.objects.create(
-#             username=validated_data['username'],
-#             email=validated_data['email'],
-#             first_name=validated_data['first_name'],
-#             last_name=validated_data['last_name']
-#         )
-#
-#         user.set_password(validated_data['password'])
-#         user.save()
-#
-#         return user
+
+class SignUpIndividualAuthSerializer(serializers.Serializer):
+    password = serializers.CharField(required=True, write_only=True)
+    region = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=Region.objects.all())
+    district = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=District.objects.all())
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def create(self, validated_data):
+        user = validated_data.get('user')
+        password = validated_data.get('password')
+        region = validated_data.get('region')
+        district = validated_data.get('district')
+
+        user.set_password(password)
+        user.save()
+
+        user.user_individual.region = region
+        user.user_individual.district = district
+        user.user_individual.save()
+        return user
+
+
+class SignUpEntityAuthSerializer(serializers.Serializer):
+    stir = serializers.CharField(required=True, write_only=True)
+    company_name = serializers.CharField(required=True, write_only=True)
+    company_description = serializers.CharField(required=True, write_only=True)
+    company_type = serializers.PrimaryKeyRelatedField(required=True, write_only=True,
+                                                      queryset=CompanyType.objects.all())
+
+    password = serializers.CharField(required=True, write_only=True)
+    region = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=Region.objects.all())
+    district = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=District.objects.all())
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def create(self, validated_data):
+        user = validated_data.get('user')
+        password = validated_data.get('password')
+
+        stir = validated_data.get('stir')
+        company_name = validated_data.get('company_name')
+        company_description = validated_data.get('company_description')
+        company_type = validated_data.get('company_type')
+        region = validated_data.get('region')
+        district = validated_data.get('district')
+
+        user.set_password(password)
+        user.save()
+
+        user.user_entity.stir = stir
+        user.user_entity.company_name = company_name
+        user.user_entity.company_description = company_description
+        user.user_entity.company_type = company_type
+        user.user_entity.region = region
+        user.user_entity.district = district
+        user.user_entity.save()
+        return user

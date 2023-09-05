@@ -26,7 +26,7 @@ class User(AbstractUser):
 class UserIndividual(BaseDatesModel):  # физ. лицо
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_individual')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_individual')
 
     def __str__(self):
         return self.user.username
@@ -36,7 +36,7 @@ class UserIndividual(BaseDatesModel):  # физ. лицо
 
 
 class UserLegalEntity(BaseDatesModel):  # юр. лицо
-    stir = models.IntegerField(null=True, blank=True)
+    stir = models.CharField(max_length=9, null=True, blank=True)
     position = models.CharField(max_length=100, null=True, blank=True)
     company_name = models.CharField(max_length=200, null=True, blank=True)
     company_description = models.TextField(null=True, blank=True)
@@ -44,7 +44,7 @@ class UserLegalEntity(BaseDatesModel):  # юр. лицо
     company_type = models.ForeignKey(CompanyType, on_delete=models.SET_NULL, null=True, blank=True)
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_entity')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_entity')
 
     def __str__(self):
         return self.user.username

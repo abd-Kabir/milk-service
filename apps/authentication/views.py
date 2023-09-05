@@ -3,10 +3,12 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.authentication.models import User, VerifyCode
-from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer
+from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
+    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer
 from apps.tools.utils.mailing import send_verification_token
 from config.utils.api_exceptions import APIValidation
 
@@ -47,7 +49,7 @@ class SignUpContactDataAPIView(APIView):
                 send_verification_token(user=user, template_name='verification.html', subject='Verification Code')
                 return Response({"detail": "Verification code sent to you email",
                                  "status": status.HTTP_200_OK}, status=status.HTTP_200_OK)
-            except Exception as exc:
+            except:
                 raise APIValidation("Incorrect email!", status_code=status.HTTP_400_BAD_REQUEST)
 
 
@@ -72,7 +74,40 @@ class SignUpVerifyCodeAPIView(APIView):
                 user.is_active = True
                 user.save()
                 verify_obj.delete()
-                return Response({"detail": "Successfully verified",
-                                 "user": user.username})
+
+                refresh = RefreshToken.for_user(user)
+                refresh['username'] = user.username
+                return Response({
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token)
+                })
         else:
             raise APIValidation("Code is incorrect", status_code=status.HTTP_400_BAD_REQUEST)
+
+
+class SignUpAuthAPIView(APIView):
+
+    def post(self, request):
+        user = request.user
+        if hasattr(user, 'user_entity'):
+            context = {
+                "request": self.request
+            }
+            serializer = SignUpEntityAuthSerializer(data=request.data, context=context)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({'detail': 'Created successfully',
+                             'status': status.HTTP_200_OK,
+                             'user': user.username})
+        elif hasattr(user, 'user_individual'):
+            context = {
+                "request": self.request
+            }
+            serializer = SignUpIndividualAuthSerializer(data=request.data, context=context)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({'detail': 'Created successfully',
+                             'status': status.HTTP_200_OK,
+                             'user': user.username})
+        else:
+            raise APIValidation("Restart your register")
