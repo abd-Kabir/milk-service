@@ -103,3 +103,4 @@ class SignUpEntityAuthSerializer(serializers.Serializer):
         user.user_entity.district = district
         user.user_entity.save()
         return user
+# test
