@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.generics import DestroyAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -131,3 +132,9 @@ class SignUpInterestsAPIView(APIView):
             'refresh': str(refresh),
             'access': str(refresh.access_token)
         })
+
+
+class DeleteUserAPIView(DestroyAPIView):
+    queryset = User.objects.all()
+    permission_classes = [AllowAny, ]
+    lookup_field = 'username'
