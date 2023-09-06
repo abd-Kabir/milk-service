@@ -29,8 +29,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
 ]
 
-# Application definition
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
