@@ -60,6 +60,7 @@ class SignUpIndividualAuthSerializer(serializers.Serializer):
         district = validated_data.get('district')
 
         user.set_password(password)
+        user.is_active = True
         user.save()
 
         user.user_individual.region = region
@@ -93,6 +94,7 @@ class SignUpEntityAuthSerializer(serializers.Serializer):
         district = validated_data.get('district')
 
         user.set_password(password)
+        user.is_active = True
         user.save()
 
         user.user_entity.stir = stir

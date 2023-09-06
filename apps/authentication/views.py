@@ -71,21 +71,24 @@ class SignUpVerifyCodeAPIView(APIView):
 
             user = verify_obj.user
             if user == email_user:
-                user.is_active = True
-                user.save()
+                # user.is_active = True
+                # user.save()
                 verify_obj.delete()
 
-                refresh = RefreshToken.for_user(user)
-                refresh['username'] = user.username
+                # refresh = RefreshToken.for_user(user)
+                # refresh['username'] = user.username
                 return Response({
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token)
+                    # 'refresh': str(refresh),
+                    # 'access': str(refresh.access_token)
+                    'detail': 'Successfully verified',
+                    'status': status.HTTP_200_OK
                 })
         else:
             raise APIValidation("Code is incorrect", status_code=status.HTTP_400_BAD_REQUEST)
 
 
 class SignUpAuthAPIView(APIView):
+    permission_classes = [AllowAny, ]
 
     def post(self, request):
         user = request.user
