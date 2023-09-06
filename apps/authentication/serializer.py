@@ -54,11 +54,12 @@ class SignUpIndividualAuthSerializer(serializers.Serializer):
     district = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=District.objects.all())
 
     def create(self, validated_data):
-        user = validated_data.get('user')
+        username = validated_data.get('username')
         password = validated_data.get('password')
         region = validated_data.get('region')
         district = validated_data.get('district')
 
+        user = get_object_or_404(User, username=username)
         user.set_password(password)
         user.save()
 
