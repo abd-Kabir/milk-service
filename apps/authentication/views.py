@@ -117,6 +117,8 @@ class SignUpAuthAPIView(APIView):
 
 
 class SignUpInterestsAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
     def post(self, request):
         username = request.data.get('username')
         user = get_object_or_404(User, username=username)
