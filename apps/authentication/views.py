@@ -91,7 +91,7 @@ class SignUpAuthAPIView(APIView):
     permission_classes = [AllowAny, ]
 
     def post(self, request):
-        user = request.user
+        user = get_object_or_404(User, username=request.data.get('username'))
         if hasattr(user, 'user_entity'):
             context = {
                 "request": self.request
@@ -113,4 +113,19 @@ class SignUpAuthAPIView(APIView):
                              'status': status.HTTP_200_OK,
                              'user': user.username})
         else:
-            raise APIValidation("Restart your register")
+            raise APIValidation("Restart your register", status_code=status.HTTP_400_BAD_REQUEST)
+
+
+class SignUpInterestsAPIView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        user = get_object_or_404(User, username=username)
+        user.is_active = True
+        user.save()
+
+        refresh = RefreshToken.for_user(user)
+        refresh['username'] = user.username
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token)
+        })

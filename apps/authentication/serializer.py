@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -47,11 +48,10 @@ class SignUpPersonalDataSerializer(serializers.Serializer):
 
 
 class SignUpIndividualAuthSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True, write_only=True)
     password = serializers.CharField(required=True, write_only=True)
     region = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=Region.objects.all())
     district = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=District.objects.all())
-
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def create(self, validated_data):
         user = validated_data.get('user')
@@ -60,7 +60,6 @@ class SignUpIndividualAuthSerializer(serializers.Serializer):
         district = validated_data.get('district')
 
         user.set_password(password)
-        user.is_active = True
         user.save()
 
         user.user_individual.region = region
@@ -76,14 +75,13 @@ class SignUpEntityAuthSerializer(serializers.Serializer):
     company_type = serializers.PrimaryKeyRelatedField(required=True, write_only=True,
                                                       queryset=CompanyType.objects.all())
 
+    username = serializers.CharField(required=True, write_only=True)
     password = serializers.CharField(required=True, write_only=True)
     region = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=Region.objects.all())
     district = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=District.objects.all())
 
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
     def create(self, validated_data):
-        user = validated_data.get('user')
+        username = validated_data.get('username')
         password = validated_data.get('password')
 
         stir = validated_data.get('stir')
@@ -93,8 +91,8 @@ class SignUpEntityAuthSerializer(serializers.Serializer):
         region = validated_data.get('region')
         district = validated_data.get('district')
 
+        user = get_object_or_404(User, username=username)
         user.set_password(password)
-        user.is_active = True
         user.save()
 
         user.user_entity.stir = stir
