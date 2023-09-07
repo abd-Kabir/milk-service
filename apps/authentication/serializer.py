@@ -21,7 +21,7 @@ class JWTObtainPairSerializer(TokenObtainPairSerializer):
 class SignUpPersonalDataSerializer(serializers.Serializer):
     username = serializers.CharField()
     last_name = serializers.CharField()
-    middle_name = serializers.CharField()
+    middle_name = serializers.CharField(required=False)
     first_name = serializers.CharField()
     position = serializers.CharField()
     user_type = serializers.CharField()
