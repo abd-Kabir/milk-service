@@ -52,6 +52,8 @@ class SignUpContactDataAPIView(APIView):
                                  "status": status.HTTP_200_OK}, status=status.HTTP_200_OK)
             except:
                 raise APIValidation("Incorrect email!", status_code=status.HTTP_400_BAD_REQUEST)
+        else:
+            raise APIValidation("Send phone number or email", status_code=status.HTTP_400_BAD_REQUEST)
 
 
 class SignUpVerifyCodeAPIView(APIView):
