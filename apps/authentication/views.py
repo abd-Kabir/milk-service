@@ -140,3 +140,57 @@ class DeleteUserAPIView(DestroyAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny, ]
     lookup_field = 'username'
+
+
+class ChangePWAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
+    def post(self, request):
+        email_or_phone = request.data.get('contact')
+        if '@' in email_or_phone:
+            user = get_object_or_404(User, email=email_or_phone)
+            send_verification_token(user=user, template_name='verification.html', subject='Verification Code')
+        else:
+            pass
+        return Response({'detail': "Verification code was sent",
+                         'status': status.HTTP_200_OK})
+
+
+class VerifyPWAPIViewAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
+    def post(self, request):
+        code = request.data.get('code')
+        email_or_phone = request.data.get('contact')
+
+        if '@' in email_or_phone:
+            user = get_object_or_404(User, email=email_or_phone)
+        else:
+            pass
+
+        verify_obj = VerifyCode.objects.filter(code=code)
+        if verify_obj:
+            verify_obj = verify_obj.first()
+            v_user = verify_obj.user
+            if v_user == user:
+                verify_obj.delete()
+                return Response({
+                    'detail': 'Successfully verified',
+                    'status': status.HTTP_200_OK
+                })
+        else:
+            raise APIValidation("Code is incorrect", status_code=status.HTTP_400_BAD_REQUEST)
+
+
+class NewPWAPIView(APIView):
+    def post(self, request):
+        email_or_phone = request.data.get('contact')
+        password = request.data.get('password')
+        if '@' in email_or_phone:
+            user = get_object_or_404(User, email=email_or_phone)
+            user.set_password(password)
+            user.save()
+        else:
+            pass
+        return Response({'detail': 'Password changed',
+                         'status': status.HTTP_200_OK})

@@ -2,7 +2,8 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.authentication.views import JWTObtainPairView, SignUpPersonalDataAPIView, SignUpContactDataAPIView, \
-    SignUpVerifyCodeAPIView, SignUpAuthAPIView, SignUpInterestsAPIView, DeleteUserAPIView
+    SignUpVerifyCodeAPIView, SignUpAuthAPIView, SignUpInterestsAPIView, DeleteUserAPIView, VerifyPWAPIViewAPIView, \
+    ChangePWAPIView
 
 app_name = 'auth'
 
@@ -18,6 +19,8 @@ urlpatterns = [
     path('sign-up-auth/', SignUpAuthAPIView.as_view(), name='sign_up_auth'),
     path('sign-up-last/', SignUpInterestsAPIView.as_view(), name='sign_up_last'),
 
+    path('change-pw/', ChangePWAPIView.as_view(), name='change_pw'),
+    path('verify-pw/', VerifyPWAPIViewAPIView.as_view(), name='verify_pw'),
 
     path('delete-user/<str:username>/', DeleteUserAPIView.as_view(), name='delete_user'),
 ]
