@@ -1,6 +1,7 @@
+from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.generics import DestroyAPIView
+from rest_framework.generics import DestroyAPIView, ListAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,7 +11,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.authentication.models import User, VerifyCode
 from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
-    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, UserAdminSerializer, UserAdminRetrieveSerializer
+    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, UserAdminSerializer, UserAdminRetrieveSerializer, \
+    UserAdminRolesSerializer
 from apps.tools.utils.mailing import send_verification_token
 from config.utils.api_exceptions import APIValidation
 
@@ -205,3 +207,8 @@ class UserAdminModelViewSet(ModelViewSet):
         if self.action == 'retrieve':
             return UserAdminRetrieveSerializer(args[0])
         return super().get_serializer(*args, **kwargs)
+
+
+class UserAdminRolesListAPIView(ListAPIView):
+    queryset = Group.objects.filter(role='ADMIN')
+    serializer_class = UserAdminRolesSerializer

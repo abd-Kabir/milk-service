@@ -190,3 +190,10 @@ class UserAdminSerializer(serializers.Serializer):
         except:
             raise APIValidation("Bad request", status_code=status.HTTP_400_BAD_REQUEST)
         return instance
+
+
+class UserAdminRolesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id',
+                  'name']
