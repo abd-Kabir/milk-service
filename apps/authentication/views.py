@@ -4,12 +4,13 @@ from rest_framework.generics import DestroyAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.authentication.models import User, VerifyCode
 from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
-    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer
+    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, UserAdminSerializer, UserAdminRetrieveSerializer
 from apps.tools.utils.mailing import send_verification_token
 from config.utils.api_exceptions import APIValidation
 
@@ -194,3 +195,13 @@ class NewPWAPIView(APIView):
             pass
         return Response({'detail': 'Password changed',
                          'status': status.HTTP_200_OK})
+
+
+class UserAdminModelViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserAdminSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action == 'retrieve':
+            return UserAdminRetrieveSerializer(args[0])
+        return super().get_serializer(*args, **kwargs)

@@ -1,9 +1,17 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.validators import validate_email
 from django.db import models
 
 from apps.tools.models import Region, District, CompanyType
 from config.models import BaseDatesModel
+
+USER = 'USER'
+ADMIN = 'ADMIN'
+ROLE_CHOICES = [
+    (USER, USER),
+    (ADMIN, ADMIN)
+]
+Group.add_to_class('role', models.CharField(choices=ROLE_CHOICES, max_length=10, null=True, blank=True))
 
 
 class VerifyCode(BaseDatesModel):
@@ -51,3 +59,12 @@ class UserLegalEntity(BaseDatesModel):  # юр. лицо
 
     class Meta:
         db_table = 'UserLegalEntity'
+
+
+class UserAdmin(BaseDatesModel):  # admin
+    position = models.CharField(max_length=100, null=True, blank=True)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_admin')
+
+    class Meta:
+        db_table = 'UserAdmin'
