@@ -6,7 +6,7 @@ from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
 
-class UserAdminRetrieveSerializer(serializers.ModelSerializer):
+class UserAdminGetSerializer(serializers.ModelSerializer):
     position = serializers.CharField(allow_null=True, source='user_admin.position')
     group = serializers.IntegerField(allow_null=True, source='groups.first.id')
 
