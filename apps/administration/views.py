@@ -1,5 +1,4 @@
 from django.contrib.auth.models import Group
-from django.db.models import F
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -8,7 +7,7 @@ from apps.authentication.models import User
 
 
 class UserAdminModelViewSet(ModelViewSet):
-    queryset = User.objects.filter(groups__role='ADMIN')
+    queryset = User.objects.filter(groups__role='ADMIN').exclude(groups__name="SUPERADMIN")
     serializer_class = UserAdminSerializer
 
     def get_serializer(self, *args, **kwargs):
