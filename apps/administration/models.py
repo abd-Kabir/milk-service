@@ -23,14 +23,18 @@ class UserAdministration(BaseDatesModel):  # administration
 
 
 class Category(BaseDatesModel):
-    name = models.CharField(max_length=255)
+    name_uz = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'Category'
 
 
 class SubCategory(BaseDatesModel):
-    name = models.CharField(max_length=255)
+    name_uz = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategory')
 
     class Meta:
@@ -38,14 +42,18 @@ class SubCategory(BaseDatesModel):
 
 
 class Catalog(BaseDatesModel):
-    name = models.CharField(max_length=255)
+    name_uz = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'Catalog'
 
 
 class SubCatalog(BaseDatesModel):
-    name = models.CharField(max_length=255)
+    name_uz = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
     catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, related_name='subcatalog')
 
     class Meta:

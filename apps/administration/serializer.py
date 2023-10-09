@@ -104,17 +104,18 @@ class UserAdminRolesSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name', ]
+        fields = ['id',
+                  'name_uz',
+                  'name_en',
+                  'name_ru', ]
 
 
-class CategoryListSerializer(serializers.ModelSerializer):
-    value = serializers.IntegerField(source='id')
-    label = serializers.CharField(source='name')
-
+class CategoryNamesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['value',
-                  'label', ]
+        fields = ['name_uz',
+                  'name_en',
+                  'name_ru', ]
 
 
 # SubCategory
@@ -122,25 +123,41 @@ class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
         fields = ['id',
-                  'name',
+                  'name_uz',
+                  'name_en',
+                  'name_ru',
                   'category', ]
+
+
+class SubCategoryGetSerializer(serializers.ModelSerializer):
+    category_display = CategoryNamesSerializer(source='category')
+
+    class Meta:
+        model = SubCategory
+        fields = ['id',
+                  'name_uz',
+                  'name_en',
+                  'name_ru',
+                  'category',
+                  'category_display', ]
 
 
 # Catalog
 class CatalogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Catalog
-        fields = ['name', ]
+        fields = ['id',
+                  'name_uz',
+                  'name_en',
+                  'name_ru', ]
 
 
-class CatalogListSerializer(serializers.ModelSerializer):
-    value = serializers.IntegerField(source='id')
-    label = serializers.CharField(source='name')
-
+class CatalogNamesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Catalog
-        fields = ['value',
-                  'label', ]
+        fields = ['name_uz',
+                  'name_en',
+                  'name_ru', ]
 
 
 # SubCatalog
@@ -148,5 +165,20 @@ class SubCatalogSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCatalog
         fields = ['id',
-                  'name',
+                  'name_uz',
+                  'name_en',
+                  'name_ru',
                   'catalog', ]
+
+
+class SubCatalogGetSerializer(serializers.ModelSerializer):
+    catalog_display = CatalogNamesSerializer(source='catalog')
+
+    class Meta:
+        model = SubCatalog
+        fields = ['id',
+                  'name_uz',
+                  'name_en',
+                  'name_ru',
+                  'catalog',
+                  'catalog_display', ]

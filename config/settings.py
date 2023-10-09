@@ -4,6 +4,7 @@ from os import getenv
 from os.path import join as join_path
 
 from dotenv import load_dotenv
+from django.utils.translation import gettext_lazy as _
 
 load_dotenv()
 
@@ -136,11 +137,25 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# Languages
+LANGUAGE_CODE = 'uz-UZ'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = [
+    ("uz", _("Uzbek")),
+    ("ru", _("German")),
+    ("en", _("English")),
+]
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
+MODELTRANSLATION_LANGUAGES = ('uz', 'en', 'ru')
+MODELTRANSLATION_TRANSLATION_FILES = (
+    'news.translation',
+    'projects.translation',
+)
 
 USE_I18N = True
+
+TIME_ZONE = 'UTC'
 
 USE_TZ = True
 
