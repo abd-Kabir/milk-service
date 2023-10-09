@@ -22,5 +22,31 @@ class UserAdministration(BaseDatesModel):  # administration
         db_table = 'UserAdministration'
 
 
-# class Category(BaseDatesModel):
-#     name
+class Category(BaseDatesModel):
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'Category'
+
+
+class SubCategory(BaseDatesModel):
+    name = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategory')
+
+    class Meta:
+        db_table = 'SubCategory'
+
+
+class Catalog(BaseDatesModel):
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'Catalog'
+
+
+class SubCatalog(BaseDatesModel):
+    name = models.CharField(max_length=255)
+    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, related_name='subcatalog')
+
+    class Meta:
+        db_table = 'SubCatalog'

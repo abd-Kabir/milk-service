@@ -1,11 +1,12 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers, status
 
-from apps.administration.models import UserAdministration
+from apps.administration.models import UserAdministration, Category, SubCategory, Catalog
 from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
 
+# User-Admin
 class UserAdminGetSerializer(serializers.ModelSerializer):
     position = serializers.CharField(allow_null=True, source='user_admin.position')
     group = serializers.IntegerField(allow_null=True, source='groups.first.id')
@@ -26,7 +27,7 @@ class UserAdminGetSerializer(serializers.ModelSerializer):
 
 class UserAdminSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
 
     last_name = serializers.CharField()
     first_name = serializers.CharField()
@@ -97,3 +98,46 @@ class UserAdminRolesSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['id',
                   'name']
+
+
+# Category
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['name', ]
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+    value = serializers.IntegerField(source='id')
+    label = serializers.CharField(source='name')
+
+    class Meta:
+        model = Category
+        fields = ['value',
+                  'label', ]
+
+
+# SubCategory
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = ['id',
+                  'name',
+                  'category', ]
+
+
+# Catalog
+class CatalogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Catalog
+        fields = ['name', ]
+
+
+class CatalogListSerializer(serializers.ModelSerializer):
+    value = serializers.IntegerField(source='id')
+    label = serializers.CharField(source='name')
+
+    class Meta:
+        model = Catalog
+        fields = ['value',
+                  'label', ]
