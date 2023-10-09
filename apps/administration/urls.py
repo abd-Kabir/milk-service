@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from apps.administration.views import UserAdminModelViewSet, UserAdminRolesListAPIView, CategoryModelViewSet, \
-    SubCategoryModelViewSet, CatalogModelViewSet, SubCatalogModelViewSet
+    SubCategoryModelViewSet, CatalogModelViewSet, SubCatalogModelViewSet, ServiceModelViewSet, NewsModelViewSet
 
 router = DefaultRouter()
 router.register(r'admin-user', UserAdminModelViewSet, basename='admin_user')
@@ -10,6 +10,8 @@ router.register(r'category', CategoryModelViewSet, basename='category')
 router.register(r'subcategory', SubCategoryModelViewSet, basename='subcategory')
 router.register(r'catalog', CatalogModelViewSet, basename='subcategory')
 router.register(r'subcatalog', SubCatalogModelViewSet, basename='subcategory')
+router.register(r'service', ServiceModelViewSet, basename='subcategory')
+router.register(r'news', NewsModelViewSet, basename='subcategory')
 
 app_name = 'administration'
 urlpatterns = [

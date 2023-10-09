@@ -2,10 +2,10 @@ from django.contrib.auth.models import Group
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
-from apps.administration.models import Category, SubCategory, Catalog, SubCatalog
+from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News
 from apps.administration.serializer import UserAdminSerializer, UserAdminGetSerializer, UserAdminRolesSerializer, \
     CategorySerializer, CatalogSerializer, SubCatalogSerializer, SubCategorySerializer, SubCategoryGetSerializer, \
-    SubCatalogGetSerializer
+    SubCatalogGetSerializer, ServiceSerializer, NewsSerializer
 from apps.authentication.models import User
 
 
@@ -63,3 +63,15 @@ class SubCatalogModelViewSet(ModelViewSet):
         elif self.action == 'retrieve':
             return SubCatalogGetSerializer(args[0])
         return super().get_serializer(*args, **kwargs)
+
+
+# Service
+class ServiceModelViewSet(ModelViewSet):
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+
+
+# News
+class NewsModelViewSet(ModelViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
