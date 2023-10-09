@@ -4,10 +4,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.authentication.views import JWTObtainPairView, SignUpPersonalDataAPIView, SignUpContactDataAPIView, \
     SignUpVerifyCodeAPIView, SignUpAuthAPIView, SignUpInterestsAPIView, DeleteUserAPIView, VerifyPWAPIViewAPIView, \
-    ChangePWAPIView, NewPWAPIView, UserAdminModelViewSet, UserAdminRolesListAPIView
+    ChangePWAPIView, NewPWAPIView
 
-router = DefaultRouter()
-router.register(r'admin-user', UserAdminModelViewSet, basename='admin_user')
 
 app_name = 'auth'
 urlpatterns = [
@@ -28,7 +26,7 @@ urlpatterns = [
     path('upd-pw/', NewPWAPIView.as_view(), name='upd_pw'),
 
     # roles
-    path('admin-roles/', UserAdminRolesListAPIView.as_view(), name='admin_roles'),
+    path('administration-roles/', UserAdminRolesListAPIView.as_view(), name='admin_roles'),
 
     path('delete-user/<str:username>/', DeleteUserAPIView.as_view(), name='delete_user'),
 ]

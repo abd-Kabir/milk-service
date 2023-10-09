@@ -198,17 +198,3 @@ class NewPWAPIView(APIView):
         return Response({'detail': 'Password changed',
                          'status': status.HTTP_200_OK})
 
-
-class UserAdminModelViewSet(ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserAdminSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if self.action == 'retrieve':
-            return UserAdminRetrieveSerializer(args[0])
-        return super().get_serializer(*args, **kwargs)
-
-
-class UserAdminRolesListAPIView(ListAPIView):
-    queryset = Group.objects.filter(role='ADMIN')
-    serializer_class = UserAdminRolesSerializer
