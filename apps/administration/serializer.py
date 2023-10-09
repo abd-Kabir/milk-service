@@ -9,6 +9,7 @@ from config.utils.api_exceptions import APIValidation
 class UserAdminGetSerializer(serializers.ModelSerializer):
     position = serializers.CharField(allow_null=True, source='user_admin.position')
     group = serializers.IntegerField(allow_null=True, source='groups.first.id')
+    group_display = serializers.CharField(allow_null=True, source='groups.first.name')
 
     class Meta:
         model = User
@@ -19,7 +20,8 @@ class UserAdminGetSerializer(serializers.ModelSerializer):
                   'phone_number',
                   'email',
                   'position',
-                  'group', ]
+                  'group',
+                  'group_display', ]
 
 
 class UserAdminSerializer(serializers.Serializer):
