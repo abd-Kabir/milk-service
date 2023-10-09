@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers, status
 
-from apps.administration.models import UserAdministration, Category, SubCategory, Catalog
+from apps.administration.models import UserAdministration, Category, SubCategory, Catalog, SubCatalog
 from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
@@ -141,3 +141,12 @@ class CatalogListSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = ['value',
                   'label', ]
+
+
+# SubCatalog
+class SubCatalogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCatalog
+        fields = ['id',
+                  'name',
+                  'catalog', ]

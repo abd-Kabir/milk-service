@@ -214,6 +214,7 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization'
         }
     },
+    'USE_SESSION_AUTH': False
 }
 
 # SIMPLE-JWT
