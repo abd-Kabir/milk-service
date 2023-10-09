@@ -2,8 +2,8 @@ from django.contrib.auth.models import Group
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
+from apps.administration.serializer import UserAdminSerializer, UserAdminRetrieveSerializer, UserAdminRolesSerializer
 from apps.authentication.models import User
-from apps.authentication.serializer import UserAdminSerializer, UserAdminRetrieveSerializer, UserAdminRolesSerializer
 
 
 class UserAdminModelViewSet(ModelViewSet):

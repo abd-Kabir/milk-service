@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.authentication.views import JWTObtainPairView, SignUpPersonalDataAPIView, SignUpContactDataAPIView, \
@@ -25,10 +24,6 @@ urlpatterns = [
     path('verify-pw/', VerifyPWAPIViewAPIView.as_view(), name='verify_pw'),
     path('upd-pw/', NewPWAPIView.as_view(), name='upd_pw'),
 
-    # roles
-    path('administration-roles/', UserAdminRolesListAPIView.as_view(), name='admin_roles'),
-
     path('delete-user/<str:username>/', DeleteUserAPIView.as_view(), name='delete_user'),
 ]
 
-urlpatterns += router.urls

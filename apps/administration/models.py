@@ -13,13 +13,13 @@ ROLE_CHOICES = [
 Group.add_to_class('role', models.CharField(choices=ROLE_CHOICES, max_length=10, null=True, blank=True))
 
 
-class UserAdmin(BaseDatesModel):  # administration
+class UserAdministration(BaseDatesModel):  # administration
     position = models.CharField(max_length=100, null=True, blank=True)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_admin')
 
     class Meta:
-        db_table = 'UserAdmin'
+        db_table = 'UserAdministration'
 
 
 # class Category(BaseDatesModel):

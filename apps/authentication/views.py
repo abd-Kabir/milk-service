@@ -11,8 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.authentication.models import User, VerifyCode
 from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
-    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, UserAdminSerializer, UserAdminRetrieveSerializer, \
-    UserAdminRolesSerializer
+    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer
 from apps.tools.utils.mailing import send_verification_token
 from config.utils.api_exceptions import APIValidation
 
