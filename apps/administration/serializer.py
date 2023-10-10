@@ -35,7 +35,7 @@ class UserAdminSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     email = serializers.EmailField()
     position = serializers.CharField(required=False)
-    groups = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name')
+    group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', source='groups')
 
     def create(self, validated_data):
         username = validated_data.get('username')
@@ -47,7 +47,7 @@ class UserAdminSerializer(serializers.Serializer):
         phone_number = validated_data.get('phone_number')
         email = validated_data.get('email')
         position = validated_data.get('position', None)
-        groups = validated_data.get('groups')
+        group = validated_data.get('groups')
         try:
             user = User.objects.create_user(username=username,
                                             password=password,
@@ -55,7 +55,7 @@ class UserAdminSerializer(serializers.Serializer):
                                             last_name=last_name,
                                             phone_number=phone_number,
                                             email=email)
-            user.groups.add(groups)
+            user.groups.add(group)
             UserAdministration.objects.create(position=position,
                                               user=user)
         except:
