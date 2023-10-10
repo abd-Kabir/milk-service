@@ -27,6 +27,7 @@ class SignUpPersonalDataSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     position = serializers.CharField(required=False)
     user_type = serializers.CharField()
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.filter(role='USER'))
 
     def create(self, validated_data):
         username = validated_data.get('username')
@@ -35,11 +36,13 @@ class SignUpPersonalDataSerializer(serializers.Serializer):
         middle_name = validated_data.get('middle_name')
         position = validated_data.get('position')
         user_type = validated_data.get('user_type', '').lower()
+        group = validated_data.get('group')
         user = User.objects.create(username=username,
                                    first_name=first_name,
                                    last_name=last_name,
                                    middle_name=middle_name,
                                    is_active=False)
+        user.groups.add(group)
         if user_type == 'entity':
             UserLegalEntity.objects.create(position=position,
                                            user=user)
