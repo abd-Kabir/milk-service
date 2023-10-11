@@ -21,6 +21,19 @@ class JWTObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny, ]
 
 
+class BuyerSignUpAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
+    def post(self, request):
+        try:
+            serializer = BuyerSignUpSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+            return Response({"detail": "Continue registration step-by-step", 'user': user.username})
+        except Exception as exc:
+            raise APIValidation("Bad request!", status_code=status.HTTP_400_BAD_REQUEST)
+
+
 class SignUpPersonalDataAPIView(APIView):
     permission_classes = [AllowAny, ]
 
@@ -196,4 +209,3 @@ class NewPWAPIView(APIView):
             pass
         return Response({'detail': 'Password changed',
                          'status': status.HTTP_200_OK})
-

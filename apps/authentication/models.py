@@ -19,8 +19,23 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     middle_name = models.CharField(max_length=150, null=True, blank=True)
 
+    def __str__(self):
+        return self.username
+
     class Meta:
         db_table = 'User'
+
+
+class UserBuyer(BaseDatesModel):
+    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
+    district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_individual')
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        db_table = 'UserBuyer'
 
 
 class UserIndividual(BaseDatesModel):  # физ. лицо

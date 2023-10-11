@@ -20,6 +20,27 @@ class JWTObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 
+class BuyerSignUpSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    last_name = serializers.CharField()
+    middle_name = serializers.CharField(required=False)
+    first_name = serializers.CharField()
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.filter(role='USER'))
+
+    def create(self, validated_data):
+        username = validated_data.get('username')
+        first_name = validated_data.get('first_name')
+        last_name = validated_data.get('last_name')
+        middle_name = validated_data.get('middle_name')
+        group = validated_data.get('group')
+        user = User.objects.create(username=username,
+                                   first_name=first_name,
+                                   last_name=last_name,
+                                   middle_name=middle_name,
+                                   is_active=False)
+        user.groups.add(group)
+
+
 class SignUpPersonalDataSerializer(serializers.Serializer):
     username = serializers.CharField()
     last_name = serializers.CharField()
