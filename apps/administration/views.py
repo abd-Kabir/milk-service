@@ -3,6 +3,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner
@@ -10,7 +11,7 @@ from apps.administration.serializer import UserAdminSerializer, UserAdminGetSeri
     CategorySerializer, CatalogSerializer, SubCatalogSerializer, SubCategorySerializer, SubCategoryGetSerializer, \
     SubCatalogGetSerializer, ServiceSerializer, NewsSerializer, BannerSerializer
 from apps.authentication.models import User
-from config.utils.permissions import UserPermission
+from config.utils.permissions import LandingPage
 
 
 # User-Admin
@@ -75,12 +76,20 @@ class ServiceModelViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
 
 
+class CategoryCatalogAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
+    def get(self):
+        category_queryset = Category.objects.all()
+        category_serializer = CategorySerializer(category_queryset, many=True)
+
+
 # News
 class NewsModelViewSet(ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     parser_classes = (MultiPartParser,)
-    permission_classes = [UserPermission, ]
+    permission_classes = [LandingPage, ]
 
 
 # News
@@ -88,4 +97,4 @@ class BannerModelViewSet(ModelViewSet):
     queryset = Banner.objects.all()
     serializer_class = BannerSerializer
     parser_classes = (MultiPartParser,)
-    permission_classes = [UserPermission, ]
+    permission_classes = [LandingPage, ]
