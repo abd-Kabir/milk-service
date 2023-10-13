@@ -9,6 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from apps.administration.models import SubCategory, SubCatalog, SubService
 from apps.authentication.models import User, VerifyCode
 from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
     SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, BuyerSignUpSerializer, BuyerSignUpFinalSerializer
@@ -159,6 +160,18 @@ class SignUpInterestsAPIView(APIView):
     def post(self, request):
         username = request.data.get('username')
         user = get_object_or_404(User, username=username)
+        user_type = None
+        if hasattr(user, "user_entity"):
+            user_type = user.user_entity
+        elif hasattr(user, "user_individual"):
+            user_type = user.user_individual
+        # user_type.subcategory.add(SubCategory.objects.filter(id__in=request.data.get('subcategory_list')))
+        # user_type.subcatalog.add(SubCatalog.objects.filter(id__in=request.data.get('subcatalog_list')))
+        # user_type.subservice.add(SubService.objects.filter(id__in=request.data.get('subservice_list')))
+        user_type.subcategory.add(*request.data.get('subcategory_list'))
+        user_type.subcatalog.add(*request.data.get('subcatalog_list'))
+        user_type.subservice.add(*request.data.get('subservice_list'))
+
         user.is_active = True
         user.save()
 

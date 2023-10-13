@@ -1,8 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers, status
 
-from apps.administration.models import UserAdministration, Category, SubCategory, Catalog, SubCatalog, Service, News, \
-    Banner
+from apps.administration.models import UserAdministration, News, Banner
 from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
@@ -101,100 +100,6 @@ class UserAdminRolesSerializer(serializers.ModelSerializer):
                   'name']
 
 
-# Category
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['id',
-                  'name_uz',
-                  'name_en',
-                  'name_ru', ]
-
-
-class CategoryNamesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['name_uz',
-                  'name_en',
-                  'name_ru', ]
-
-
-# SubCategory
-class SubCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubCategory
-        fields = ['id',
-                  'name_uz',
-                  'name_en',
-                  'name_ru',
-                  'category', ]
-
-
-class SubCategoryGetSerializer(serializers.ModelSerializer):
-    category_display = CategoryNamesSerializer(source='category')
-
-    class Meta:
-        model = SubCategory
-        fields = ['id',
-                  'name_uz',
-                  'name_en',
-                  'name_ru',
-                  'category',
-                  'category_display', ]
-
-
-# Catalog
-class CatalogSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Catalog
-        fields = ['id',
-                  'name_uz',
-                  'name_en',
-                  'name_ru', ]
-
-
-class CatalogNamesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Catalog
-        fields = ['name_uz',
-                  'name_en',
-                  'name_ru', ]
-
-
-# SubCatalog
-class SubCatalogSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubCatalog
-        fields = ['id',
-                  'name_uz',
-                  'name_en',
-                  'name_ru',
-                  'catalog', ]
-
-
-class SubCatalogGetSerializer(serializers.ModelSerializer):
-    catalog_display = CatalogNamesSerializer(source='catalog')
-
-    class Meta:
-        model = SubCatalog
-        fields = ['id',
-                  'name_uz',
-                  'name_en',
-                  'name_ru',
-                  'catalog',
-                  'catalog_display', ]
-
-
-# Service
-class ServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Service
-        fields = ['id',
-                  'name_uz',
-                  'name_en',
-                  'name_ru', ]
-
-
 # News
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -210,7 +115,7 @@ class NewsSerializer(serializers.ModelSerializer):
                   'photo', ]
 
 
-# News
+# Banner
 class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner

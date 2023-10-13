@@ -1,15 +1,21 @@
 from django.contrib.auth.models import Group
-from rest_framework.decorators import permission_classes
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner
-from apps.administration.serializer import UserAdminSerializer, UserAdminGetSerializer, UserAdminRolesSerializer, \
-    CategorySerializer, CatalogSerializer, SubCatalogSerializer, SubCategorySerializer, SubCategoryGetSerializer, \
-    SubCatalogGetSerializer, ServiceSerializer, NewsSerializer, BannerSerializer
+from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner, SubService
+from apps.administration.serializers.another_serializer import UserAdminSerializer, UserAdminGetSerializer, \
+    UserAdminRolesSerializer, NewsSerializer, BannerSerializer
+from apps.administration.serializers.catalog_serializer import CatalogSerializer, SubCatalogSerializer, \
+    SubCatalogGetSerializer, CatalogSubCatalogSerializer
+from apps.administration.serializers.category_serializer import CategorySerializer, SubCategorySerializer, \
+    SubCategoryGetSerializer, CategorySubCategorySerializer
+from apps.administration.serializers.service_serializer import ServiceSerializer, SubServiceSerializer, \
+    SubServiceGetSerializer, ServiceSubServiceSerializer
+
 from apps.authentication.models import User
 from config.utils.permissions import LandingPage
 
@@ -76,12 +82,34 @@ class ServiceModelViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
 
 
-class CategoryCatalogAPIView(APIView):
+# SubService
+class SubServiceModelViewSet(ModelViewSet):
+    queryset = SubService.objects.all()
+    serializer_class = SubServiceSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action == 'list':
+            return SubServiceGetSerializer(args[0], many=True)
+        elif self.action == 'retrieve':
+            return SubServiceGetSerializer(args[0])
+        return super().get_serializer(*args, **kwargs)
+
+
+class GetTypesAPIView(APIView):
     permission_classes = [AllowAny, ]
 
-    def get(self):
+    def get(self, request):
         category_queryset = Category.objects.all()
-        category_serializer = CategorySerializer(category_queryset, many=True)
+        category_serializer = CategorySubCategorySerializer(category_queryset, many=True)
+        catalog_queryset = Catalog.objects.all()
+        catalog_serializer = CatalogSubCatalogSerializer(catalog_queryset, many=True)
+        service_queryset = Service.objects.all()
+        service_serializer = ServiceSubServiceSerializer(service_queryset, many=True)
+        return Response({
+            "category": category_serializer.data,
+            "catalog": catalog_serializer.data,
+            "service": service_serializer.data
+        })
 
 
 # News

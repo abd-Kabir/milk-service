@@ -1,9 +1,8 @@
-from datetime import datetime
-
 from django.contrib.auth.models import Group
 from django.db import models
 
 from apps.authentication.models import User
+from apps.tools.utils.hash import hash_filename
 from config.models import BaseDatesModel
 
 USER = 'USER'
@@ -14,10 +13,6 @@ ROLE_CHOICES = [
 ]
 Group.add_to_class('role', models.CharField(choices=ROLE_CHOICES, max_length=10, null=True, blank=True))
 
-
-def hash_filename(instance, filename):
-    now = datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
-    return f"uploads/{now}_{filename}"
 
 
 class UserAdministration(BaseDatesModel):  # administration
@@ -74,6 +69,16 @@ class Service(BaseDatesModel):
 
     class Meta:
         db_table = 'Service'
+
+
+class SubService(BaseDatesModel):
+    name_uz = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='subservice')
+
+    class Meta:
+        db_table = 'SubService'
 
 
 class News(BaseDatesModel):
