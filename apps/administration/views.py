@@ -1,6 +1,8 @@
 from django.contrib.auth.models import Group
+from rest_framework.decorators import permission_classes
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News

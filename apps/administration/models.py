@@ -87,3 +87,16 @@ class News(BaseDatesModel):
 
     class Meta:
         db_table = 'News'
+
+
+class Banner(BaseDatesModel):
+    title_uz = models.CharField(max_length=255)
+    title_ru = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    description_uz = models.TextField()
+    description_ru = models.TextField()
+    description_en = models.TextField()
+    photo = models.FileField(upload_to=hash_filename)
+
+    class Meta:
+        db_table = 'Banner'
