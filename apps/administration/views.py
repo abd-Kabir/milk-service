@@ -5,10 +5,10 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
-from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News
+from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner
 from apps.administration.serializer import UserAdminSerializer, UserAdminGetSerializer, UserAdminRolesSerializer, \
     CategorySerializer, CatalogSerializer, SubCatalogSerializer, SubCategorySerializer, SubCategoryGetSerializer, \
-    SubCatalogGetSerializer, ServiceSerializer, NewsSerializer
+    SubCatalogGetSerializer, ServiceSerializer, NewsSerializer, BannerSerializer
 from apps.authentication.models import User
 
 
@@ -78,4 +78,11 @@ class ServiceModelViewSet(ModelViewSet):
 class NewsModelViewSet(ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
+    parser_classes = (MultiPartParser,)
+
+
+# News
+class BannerModelViewSet(ModelViewSet):
+    queryset = Banner.objects.all()
+    serializer_class = BannerSerializer
     parser_classes = (MultiPartParser,)

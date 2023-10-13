@@ -1,7 +1,8 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers, status
 
-from apps.administration.models import UserAdministration, Category, SubCategory, Catalog, SubCatalog, Service, News
+from apps.administration.models import UserAdministration, Category, SubCategory, Catalog, SubCatalog, Service, News, \
+    Banner
 from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
@@ -198,6 +199,20 @@ class ServiceSerializer(serializers.ModelSerializer):
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
+        fields = ['id',
+                  'title_uz',
+                  'title_ru',
+                  'title_en',
+                  'description_uz',
+                  'description_ru',
+                  'description_en',
+                  'photo', ]
+
+
+# News
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
         fields = ['id',
                   'title_uz',
                   'title_ru',
