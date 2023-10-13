@@ -10,6 +10,7 @@ from apps.administration.serializer import UserAdminSerializer, UserAdminGetSeri
     CategorySerializer, CatalogSerializer, SubCatalogSerializer, SubCategorySerializer, SubCategoryGetSerializer, \
     SubCatalogGetSerializer, ServiceSerializer, NewsSerializer, BannerSerializer
 from apps.authentication.models import User
+from config.utils.permissions import UserPermission
 
 
 # User-Admin
@@ -79,6 +80,7 @@ class NewsModelViewSet(ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     parser_classes = (MultiPartParser,)
+    permission_classes = [UserPermission, ]
 
 
 # News
@@ -86,3 +88,4 @@ class BannerModelViewSet(ModelViewSet):
     queryset = Banner.objects.all()
     serializer_class = BannerSerializer
     parser_classes = (MultiPartParser,)
+    permission_classes = [UserPermission, ]

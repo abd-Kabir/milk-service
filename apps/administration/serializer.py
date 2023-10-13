@@ -200,6 +200,7 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = ['id',
+                  'created_at',
                   'title_uz',
                   'title_ru',
                   'title_en',
@@ -214,6 +215,7 @@ class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
         fields = ['id',
+                  'created_at',
                   'title_uz',
                   'title_ru',
                   'title_en',
