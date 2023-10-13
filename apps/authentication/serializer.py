@@ -41,6 +41,27 @@ class BuyerSignUpSerializer(serializers.Serializer):
         user.groups.add(group)
 
 
+class BuyerSignUpFinalSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True, write_only=True)
+    password = serializers.CharField(required=True, write_only=True)
+    region = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=Region.objects.all())
+    district = serializers.PrimaryKeyRelatedField(required=True, write_only=True, queryset=District.objects.all())
+
+    def create(self, validated_data):
+        username = validated_data.get('username')
+        password = validated_data.get('password')
+        region = validated_data.get('region')
+        district = validated_data.get('district')
+
+        user = get_object_or_404(User, username=username)
+        user.set_password(password)
+        user.save()
+
+        user.user_buyer.region = region
+        user.user_buyer.district = district
+        user.user_buyer.save()
+
+
 class SignUpPersonalDataSerializer(serializers.Serializer):
     username = serializers.CharField()
     last_name = serializers.CharField()

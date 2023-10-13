@@ -29,7 +29,7 @@ class User(AbstractUser):
 class UserBuyer(BaseDatesModel):
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_individual')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_buyer')
 
     def __str__(self):
         return self.user.username

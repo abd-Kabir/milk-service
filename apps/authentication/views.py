@@ -11,7 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.authentication.models import User, VerifyCode
 from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
-    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer
+    SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, BuyerSignUpSerializer, BuyerSignUpFinalSerializer
 from apps.tools.utils.mailing import send_verification_token
 from config.utils.api_exceptions import APIValidation
 
@@ -30,6 +30,25 @@ class BuyerSignUpAPIView(APIView):
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
             return Response({"detail": "Continue registration step-by-step", 'user': user.username})
+        except Exception as exc:
+            raise APIValidation("Bad request!", status_code=status.HTTP_400_BAD_REQUEST)
+
+
+class BuyerSignUpFinalAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
+    def post(self, request):
+        try:
+            serializer = BuyerSignUpFinalSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+
+            refresh = RefreshToken.for_user(user)
+            refresh['username'] = user.username
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token)
+            })
         except Exception as exc:
             raise APIValidation("Bad request!", status_code=status.HTTP_400_BAD_REQUEST)
 
