@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'apps.authentication',
     'apps.tools',
     'apps.administration',
+    'apps.personal_cabinet',
 ]
 
 MIDDLEWARE = [

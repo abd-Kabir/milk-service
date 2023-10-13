@@ -53,6 +53,8 @@ class UserBuyer(BaseDatesModel):  # покупщик
 
 
 class UserIndividual(BaseDatesModel):  # физ. лицо
+    service_certificate = models.FileField(upload_to=hash_filename, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_individual')
@@ -72,8 +74,11 @@ class UserLegalEntity(BaseDatesModel):  # юр. лицо
     position = models.CharField(max_length=100, null=True, blank=True)
     company_name = models.CharField(max_length=200, null=True, blank=True)
     company_description = models.TextField(null=True, blank=True)
-
     company_type = models.ForeignKey(CompanyType, on_delete=models.SET_NULL, null=True, blank=True)
+
+    service_certificate = models.FileField(upload_to=hash_filename, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_entity')

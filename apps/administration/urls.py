@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from apps.administration.views import UserAdminModelViewSet, UserAdminRolesListAPIView, CategoryModelViewSet, \
     SubCategoryModelViewSet, CatalogModelViewSet, SubCatalogModelViewSet, ServiceModelViewSet, NewsModelViewSet, \
-    BannerModelViewSet, GetTypesAPIView, SubServiceModelViewSet
+    BannerModelViewSet, GetCatTypesAPIView, SubServiceModelViewSet
 
 router = DefaultRouter()
 router.register(r'admin-user', UserAdminModelViewSet, basename='admin_user')
@@ -19,7 +19,8 @@ router.register(r'banner', BannerModelViewSet, basename='banner')
 app_name = 'administration'
 urlpatterns = [
     path('administration-roles/', UserAdminRolesListAPIView.as_view(), name='admin_roles'),
-    path('types/', GetTypesAPIView.as_view(), name='types'),
+    path('cat-types/', GetCatTypesAPIView.as_view(), name='cat_types'),
+    path('service-types/', GetCatTypesAPIView.as_view(), name='service_types'),
 ]
 
 urlpatterns += router.urls

@@ -95,7 +95,7 @@ class SubServiceModelViewSet(ModelViewSet):
         return super().get_serializer(*args, **kwargs)
 
 
-class GetTypesAPIView(APIView):
+class GetCatTypesAPIView(APIView):
     permission_classes = [AllowAny, ]
 
     def get(self, request):
@@ -103,11 +103,19 @@ class GetTypesAPIView(APIView):
         category_serializer = CategorySubCategorySerializer(category_queryset, many=True)
         catalog_queryset = Catalog.objects.all()
         catalog_serializer = CatalogSubCatalogSerializer(catalog_queryset, many=True)
+        return Response({
+            "category": category_serializer.data,
+            "catalog": catalog_serializer.data
+        })
+
+
+class GetServiceTypesAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
+    def get(self, request):
         service_queryset = Service.objects.all()
         service_serializer = ServiceSubServiceSerializer(service_queryset, many=True)
         return Response({
-            "category": category_serializer.data,
-            "catalog": catalog_serializer.data,
             "service": service_serializer.data
         })
 

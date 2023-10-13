@@ -12,10 +12,21 @@ class JWTObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
+        user_type = None
         token['username'] = user.username
         token['first_name'] = user.first_name
         token['last_name'] = user.last_name
+        group = user.groups.all()
+        if group:
+            group = group.first()
+            token['group'] = group.name
+            if hasattr(user, 'user_entity'):
+                user_type = user.user_entity
+            elif hasattr(user, 'user_individual'):
+                user_type = user.user_individual
+            token['subservice'] = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
+            token['subcatalog'] = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
+            token['subcategory'] = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
 
         return token
 
