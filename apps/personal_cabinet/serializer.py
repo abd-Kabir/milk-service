@@ -216,3 +216,9 @@ class PostServiceSerializer(serializers.ModelSerializer):
                   'photo',
                   'service_type',
                   'user', ]
+
+
+class CombinedPostSerializer(serializers.Serializer):
+    category = PostCategorySerializer(many=True)
+    catalog = PostCatalogSerializer(many=True)
+    service = PostServiceSerializer(many=True)

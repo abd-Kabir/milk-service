@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from apps.personal_cabinet.views import PersonalDataRetrieveAPIView, PersonalDataUpdateAPIView, GetAllInterestsAPIView, \
+from apps.personal_cabinet.views import PersonalDataRetrieveAPIView, PersonalDataUpdateAPIView, GetInterestsAPIView, \
     PostCategoryModelViewSet, PostServiceModelViewSet, PostCatalogModelViewSet
 
 router = DefaultRouter()
@@ -13,7 +13,7 @@ app_name = 'personal_cabinet'
 urlpatterns = [
     path('personal/', PersonalDataRetrieveAPIView.as_view(), name='personal'),
     path('update/', PersonalDataUpdateAPIView.as_view(), name='update'),
-    path('interests/', GetAllInterestsAPIView.as_view(), name='interests'),
+    path('interests/', GetInterestsAPIView.as_view(), name='interests'),
 ]
 
 urlpatterns += router.urls

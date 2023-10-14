@@ -1,6 +1,6 @@
 from django.http import Http404
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import RetrieveAPIView, UpdateAPIView, ListAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,7 +10,7 @@ from apps.authentication.models import User
 from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService
 from apps.personal_cabinet.serializer import UserEntityPersonalDataSerializer, UserEntityServicePersonalDataSerializer, \
     UserBuyerPersonalDataSerializer, UserIndividualPersonalDataSerializer, PostCategorySerializer, \
-    PostCatalogSerializer, PostServiceSerializer
+    PostCatalogSerializer, PostServiceSerializer, CombinedPostSerializer
 from config.utils.api_exceptions import APIValidation
 
 
@@ -76,7 +76,7 @@ class PersonalDataUpdateAPIView(UpdateAPIView):
         raise Http404("User not found")
 
 
-class GetAllInterestsAPIView(APIView):
+class GetInterestsAPIView(APIView):
     def get(self, request):
         user = request.user
         user_type = None
@@ -119,3 +119,21 @@ class PostServiceModelViewSet(ModelViewSet):
 
     def get_queryset(self):
         return PostService.objects.filter(user=self.request.user)
+
+
+class CombinedPostAPIView(ListAPIView):
+    serializer_class = CombinedPostSerializer
+
+    def get_queryset(self):
+        post_category = PostCategory.objects.all()
+        post_catalog = PostCatalog.objects.all()
+        post_service = PostService.objects.all()
+
+        # Combine the data from the three models into a dictionary
+        combined_data = {
+            "model_a_data": post_category,
+            "model_b_data": post_catalog,
+            "model_c_data": post_service,
+        }
+
+        return [combined_data]
