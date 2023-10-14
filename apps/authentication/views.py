@@ -57,7 +57,7 @@ class BuyerSignUpFinalAPIView(APIView):
                 'access': str(refresh.access_token)
             })
         except Exception as exc:
-            raise APIValidation("Bad request!", status_code=status.HTTP_400_BAD_REQUEST)
+            raise APIValidation(f"Bad request! exception: {exc}", status_code=status.HTTP_400_BAD_REQUEST)
 
 
 class SignUpPersonalDataAPIView(APIView):
