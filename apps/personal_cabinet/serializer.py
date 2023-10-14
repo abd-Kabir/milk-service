@@ -236,6 +236,7 @@ class PostCategoryCombineSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostCategory
         fields = ['id',
+                  'created_at',
                   'description_uz',
                   'description_ru',
                   'description_en',
@@ -249,6 +250,7 @@ class PostCatalogCombineSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostCatalog
         fields = ['id',
+                  'created_at',
                   'description_uz',
                   'description_ru',
                   'description_en',
@@ -262,6 +264,7 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostService
         fields = ['id',
+                  'created_at',
                   'description_uz',
                   'description_ru',
                   'description_en',
