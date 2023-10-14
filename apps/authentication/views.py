@@ -168,9 +168,12 @@ class SignUpInterestsAPIView(APIView):
         # user_type.subcategory.add(SubCategory.objects.filter(id__in=request.data.get('subcategory_list')))
         # user_type.subcatalog.add(SubCatalog.objects.filter(id__in=request.data.get('subcatalog_list')))
         # user_type.subservice.add(SubService.objects.filter(id__in=request.data.get('subservice_list')))
-        user_type.subcategory.add(*request.data.get('subcategory_list'))
-        user_type.subcatalog.add(*request.data.get('subcatalog_list'))
-        user_type.subservice.add(*request.data.get('subservice_list'))
+        if request.data.get('subcategory_list'):
+            user_type.subcategory.add(*request.data.get('subcategory_list'))
+        if request.data.get('subcatalog_list'):
+            user_type.subcatalog.add(*request.data.get('subcatalog_list'))
+        if request.data.get('subservice_list'):
+            user_type.subservice.add(*request.data.get('subservice_list'))
 
         user.is_active = True
         user.save()
