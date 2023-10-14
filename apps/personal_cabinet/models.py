@@ -77,16 +77,43 @@ class PostService(BaseDatesModel):
         db_table = 'PostService'
 
 
-# class Application(BaseDatesModel):
-#     phone_number = models.CharField(max_length=50, null=True, blank=True)
-#
-#     post_category = models.ForeignKey(PostCategory, on_delete=models.SET_NULL, related_name='application',
-#                                       null=True, blank=True)
-#     post_catalog = models.ForeignKey(PostCatalog, on_delete=models.SET_NULL, related_name='application',
-#                                      null=True, blank=True)
-#     post_service = models.ForeignKey(PostService, on_delete=models.SET_NULL, related_name='application',
-#                                      null=True, blank=True)
-#     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_service')
-#
-#     class Meta:
-#         db_table = 'Application'
+class Application(BaseDatesModel):
+    ACCEPTED = "ACCEPTED"
+    WAITING = "WAITING"
+    APPLICATION_STATUS = [
+        (ACCEPTED, ACCEPTED),
+        (WAITING, WAITING),
+    ]
+    status = models.CharField(max_length=255, choices=APPLICATION_STATUS, default=WAITING)
+
+    ZOOM = "ZOOM"
+    PHONE = "PHONE"
+    OFFLINE = "OFFLINE"
+    APPLICATION_TYPE = [
+        (ZOOM, ZOOM),
+        (PHONE, PHONE),
+        (OFFLINE, OFFLINE),
+    ]
+    type = models.CharField(max_length=10, choices=APPLICATION_TYPE, default=PHONE)
+
+    zoom_link = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=50, null=True, blank=True)
+
+    post_category = models.ForeignKey(PostCategory,
+                                      on_delete=models.SET_NULL,
+                                      related_name='applications',
+                                      null=True, blank=True)
+    post_catalog = models.ForeignKey(PostCatalog,
+                                     on_delete=models.SET_NULL,
+                                     related_name='applications',
+                                     null=True, blank=True)
+    post_service = models.ForeignKey(PostService,
+                                     on_delete=models.SET_NULL,
+                                     related_name='applications',
+                                     null=True, blank=True)
+    buyer = models.ForeignKey(User,
+                              on_delete=models.CASCADE,
+                              related_name='applications')
+
+    class Meta:
+        db_table = 'Application'

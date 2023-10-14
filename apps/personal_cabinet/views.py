@@ -32,14 +32,14 @@ class PersonalDataRetrieveAPIView(RetrieveAPIView):
                 is_service = True
         if hasattr(user, 'user_entity'):
             if is_service:
-                return UserEntityServicePersonalDataSerializer(args[0])
-            return UserEntityPersonalDataSerializer(args[0])
+                return UserEntityServicePersonalDataSerializer(args[0], context={"request": self.request})
+            return UserEntityPersonalDataSerializer(args[0], context={"request": self.request})
         elif hasattr(user, 'user_individual'):
             if is_service:
-                return UserEntityServicePersonalDataSerializer(args[0])
-            return UserIndividualPersonalDataSerializer(args[0])
+                return UserEntityServicePersonalDataSerializer(args[0], context={"request": self.request})
+            return UserIndividualPersonalDataSerializer(args[0], context={"request": self.request})
         elif hasattr(user, 'user_buyer'):
-            return UserBuyerPersonalDataSerializer(args[0])
+            return UserBuyerPersonalDataSerializer(args[0], context={"request": self.request})
         else:
             raise APIValidation("Bad request", status_code=status.HTTP_400_BAD_REQUEST)
 
@@ -153,3 +153,5 @@ class CombinedPostAPIView(APIView):
         result = result[offset:offset + limit]
         shuffle(result)
         return Response(result)
+
+# class Application

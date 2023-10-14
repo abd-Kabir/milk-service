@@ -13,4 +13,5 @@
 /.idea/milk-service.iml
 
 /db.sqlite3
+/db_old.sqlite3
 /logs.log

@@ -12,12 +12,6 @@ class UserEntityPersonalDataSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField(source='user_entity.company_name')
     position = serializers.CharField(source='user_entity.position')
     gender_display = serializers.CharField(source='get_gender_display', read_only=True)
-    avatar_url = serializers.SerializerMethodField()
-
-    def get_avatar_url(self, obj):
-        if obj.avatar:
-            return self.context['request'].build_absolute_uri(obj.avatar)
-        return None
 
     def update(self, instance, validated_data):
         instance_user_entity = instance.user_entity
@@ -47,7 +41,7 @@ class UserEntityPersonalDataSerializer(serializers.ModelSerializer):
                   'gender',
                   'gender_display',
                   'birthday',
-                  'avatar_url',
+                  'avatar',
                   'position', ]
 
 
@@ -58,12 +52,6 @@ class UserEntityServicePersonalDataSerializer(serializers.ModelSerializer):
     description = serializers.CharField(source='user_entity.description')
     service_certificate = serializers.FileField(source='user_entity.service_certificate')
     gender_display = serializers.CharField(source='get_gender_display', read_only=True)
-    avatar_url = serializers.SerializerMethodField()
-
-    def get_avatar_url(self, obj):
-        if obj.avatar:
-            return self.context['request'].build_absolute_uri(obj.avatar)
-        return None
 
     def update(self, instance, validated_data):
         instance_user_entity = instance.user_entity
@@ -96,7 +84,7 @@ class UserEntityServicePersonalDataSerializer(serializers.ModelSerializer):
                   'gender',
                   'gender_display',
                   'birthday',
-                  'avatar_url',
+                  'avatar',
                   'position',
                   'description',
                   'service_certificate', ]
@@ -104,12 +92,6 @@ class UserEntityServicePersonalDataSerializer(serializers.ModelSerializer):
 
 class UserBuyerPersonalDataSerializer(serializers.ModelSerializer):
     gender_display = serializers.CharField(source='get_gender_display', read_only=True)
-    avatar_url = serializers.SerializerMethodField()
-
-    def get_avatar_url(self, obj):
-        if obj.avatar:
-            return self.context['request'].build_absolute_uri(obj.avatar)
-        return None
 
     class Meta:
         model = User
@@ -122,19 +104,13 @@ class UserBuyerPersonalDataSerializer(serializers.ModelSerializer):
                   'gender',
                   'gender_display',
                   'birthday',
-                  'avatar_url', ]
+                  'avatar', ]
 
 
 class UserIndividualPersonalDataSerializer(serializers.ModelSerializer):
     gender_display = serializers.CharField(source='get_gender_display', read_only=True)
     service_certificate = serializers.FileField(source='user_individual.service_certificate')
     description = serializers.CharField(source='user_individual.description')
-    avatar_url = serializers.SerializerMethodField()
-
-    def get_avatar_url(self, obj):
-        if obj.avatar:
-            return self.context['request'].build_absolute_uri(obj.avatar)
-        return None
 
     class Meta:
         model = User
@@ -147,7 +123,8 @@ class UserIndividualPersonalDataSerializer(serializers.ModelSerializer):
                   'gender',
                   'gender_display',
                   'birthday',
-                  'avatar_url',
+                  'avatar',
+                  # 'avatar_url',
                   'service_certificate',
                   'description', ]
 
