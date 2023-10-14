@@ -24,7 +24,7 @@ class JWTObtainPairSerializer(TokenObtainPairSerializer):
                 user_type = user.user_entity
             elif hasattr(user, 'user_individual'):
                 user_type = user.user_individual
-            if not None:
+            if user_type:
                 token['subservice'] = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
                 token['subcatalog'] = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
                 token['subcategory'] = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
@@ -91,7 +91,7 @@ class SignUpPersonalDataSerializer(serializers.Serializer):
         position = validated_data.get('position')
         user_type = validated_data.get('user_type', '').lower()
         group_name = validated_data.get('group').upper()
-        group = Group.objects.get(name = group_name)
+        group = Group.objects.get(name=group_name)
         user = User.objects.create(username=username,
                                    first_name=first_name,
                                    last_name=last_name,
