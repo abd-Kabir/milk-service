@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.authentication.views import JWTObtainPairView, SignUpPersonalDataAPIView, SignUpContactDataAPIView, \
     SignUpVerifyCodeAPIView, SignUpAuthAPIView, SignUpInterestsAPIView, DeleteUserAPIView, VerifyPWAPIViewAPIView, \
-    ChangePWAPIView, NewPWAPIView, BuyerSignUpAPIView
+    ChangePWAPIView, NewPWAPIView, BuyerSignUpAPIView, BuyerSignUpFinalAPIView
 
 app_name = 'auth'
 urlpatterns = [
@@ -19,7 +19,8 @@ urlpatterns = [
     path('sign-up-last/', SignUpInterestsAPIView.as_view(), name='sign_up_last'),
 
     # sign up buyer
-    path('sign-up-last-buyer/', BuyerSignUpAPIView.as_view(), name='sign_up_buyer'),
+    path('sign-up-buyer/', BuyerSignUpAPIView.as_view(), name='sign_up_buyer'),
+    path('sign-up-final/', BuyerSignUpFinalAPIView.as_view(), name='sign_up_final'),
 
     # change-password
     path('change-pw/', ChangePWAPIView.as_view(), name='change_pw'),
