@@ -80,7 +80,7 @@ class SignUpPersonalDataSerializer(serializers.Serializer):
     middle_name = serializers.CharField(required=False)
     first_name = serializers.CharField()
     position = serializers.CharField(required=False)
-    user_type = serializers.CharField()
+    user_type = serializers.CharField(required=False)
     group = serializers.CharField()
 
     def create(self, validated_data):
