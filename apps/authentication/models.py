@@ -62,8 +62,8 @@ class UserIndividual(BaseDatesModel):  # физ. лицо
     subcategory = models.ManyToManyField('administration.SubCategory', related_name='user_individual')
     subservice = models.ManyToManyField('administration.SubService', related_name='user_individual')
 
-    def __str__(self):
-        return self.user.username
+    # def __str__(self):
+    #     return self.user.username
 
     class Meta:
         db_table = 'UserIndividual'
@@ -86,8 +86,8 @@ class UserLegalEntity(BaseDatesModel):  # юр. лицо
     subcategory = models.ManyToManyField('administration.SubCategory', related_name='user_entity')
     subservice = models.ManyToManyField('administration.SubService', related_name='user_entity')
 
-    def __str__(self):
-        return self.user.username
+    # def __str__(self):
+    #     return self.user.username
 
     class Meta:
         db_table = 'UserLegalEntity'
