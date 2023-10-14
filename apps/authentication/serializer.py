@@ -37,20 +37,22 @@ class BuyerSignUpSerializer(serializers.Serializer):
     last_name = serializers.CharField()
     middle_name = serializers.CharField(required=False)
     first_name = serializers.CharField()
-    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.filter(role='USER'))
+    group = serializers.CharField()
 
     def create(self, validated_data):
         username = validated_data.get('username')
         first_name = validated_data.get('first_name')
         last_name = validated_data.get('last_name')
         middle_name = validated_data.get('middle_name')
-        group = validated_data.get('group')
+        group_name = validated_data.get('group').upper()
+        group = Group.objects.get(name=group_name)
         user = User.objects.create(username=username,
                                    first_name=first_name,
                                    last_name=last_name,
                                    middle_name=middle_name,
                                    is_active=False)
         user.groups.add(group)
+        return user
 
 
 class BuyerSignUpFinalSerializer(serializers.Serializer):
@@ -72,6 +74,7 @@ class BuyerSignUpFinalSerializer(serializers.Serializer):
         user.user_buyer.region = region
         user.user_buyer.district = district
         user.user_buyer.save()
+        return user
 
 
 class SignUpPersonalDataSerializer(serializers.Serializer):
