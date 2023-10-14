@@ -19,7 +19,7 @@ urlpatterns = [
     path('sign-up-last/', SignUpInterestsAPIView.as_view(), name='sign_up_last'),
 
     # sign up buyer
-    path('sign-up-last/', BuyerSignUpAPIView.as_view(), name='sign_up_buyer'),
+    path('sign-up-last-buyer/', BuyerSignUpAPIView.as_view(), name='sign_up_buyer'),
 
     # change-password
     path('change-pw/', ChangePWAPIView.as_view(), name='change_pw'),
