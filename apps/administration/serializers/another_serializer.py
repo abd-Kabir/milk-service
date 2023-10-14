@@ -35,7 +35,7 @@ class UserAdminSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     email = serializers.EmailField()
     position = serializers.CharField(required=False)
-    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), source='groups')
+    group = serializers.IntegerField(allow_null=True, required=False)
 
     def create(self, validated_data):
         username = validated_data.get('username')
@@ -47,7 +47,7 @@ class UserAdminSerializer(serializers.Serializer):
         phone_number = validated_data.get('phone_number')
         email = validated_data.get('email')
         position = validated_data.get('position', None)
-        group = validated_data.get('groups')
+        group = validated_data.get('group', None)
         try:
             user = User.objects.create_user(username=username,
                                             password=password,
@@ -55,13 +55,16 @@ class UserAdminSerializer(serializers.Serializer):
                                             last_name=last_name,
                                             phone_number=phone_number,
                                             email=email)
-            user.groups.add(group)
+            if group:
+                group_obj = Group.objects.get(pk=group)
+                user.groups.add(group_obj)
             UserAdministration.objects.create(position=position,
                                               user=user)
+            return user
+
         except:
             raise APIValidation("User with this username, email or phone number already exists!",
                                 status_code=status.HTTP_400_BAD_REQUEST)
-        return user
 
     def update(self, instance, validated_data):
         username = validated_data.get('username', instance.username)
