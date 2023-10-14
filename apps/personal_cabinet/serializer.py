@@ -14,7 +14,7 @@ class UserEntityPersonalDataSerializer(serializers.ModelSerializer):
     gender_display = serializers.CharField(source='get_gender_display', read_only=True)
 
     def update(self, instance, validated_data):
-        instance.user_entity.position = validated_data['user_entity']['position']
+        instance.user_entity.position = validated_data.get('position')
         instance.user_entity.updated_at = datetime.now()
         instance.user_entity.save()
         return instance
