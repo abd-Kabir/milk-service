@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -64,7 +65,7 @@ class PersonalDataUpdateAPIView(UpdateAPIView):
             raise APIValidation("Bad request", status_code=status.HTTP_400_BAD_REQUEST)
 
 
-class GetInterestsAPIView(APIView):
+class GetAllInterestsAPIView(APIView):
     def get(self, request):
         user = request.user
         user_type = None
@@ -85,13 +86,25 @@ class GetInterestsAPIView(APIView):
 class PostCategoryModelViewSet(ModelViewSet):
     queryset = PostCategory.objects.all()
     serializer_class = PostCategorySerializer
+    parser_classes = (MultiPartParser,)
+
+    def get_queryset(self):
+        return PostCategory.objects.filter(user=self.request.user)
 
 
 class PostCatalogModelViewSet(ModelViewSet):
     queryset = PostCatalog.objects.all()
     serializer_class = PostCatalogSerializer
+    parser_classes = (MultiPartParser,)
+
+    def get_queryset(self):
+        return PostCatalog.objects.filter(user=self.request.user)
 
 
 class PostServiceModelViewSet(ModelViewSet):
     queryset = PostService.objects.all()
     serializer_class = PostServiceSerializer
+    parser_classes = (MultiPartParser,)
+
+    def get_queryset(self):
+        return PostService.objects.filter(user=self.request.user)

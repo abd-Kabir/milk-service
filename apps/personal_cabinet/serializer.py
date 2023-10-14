@@ -3,7 +3,8 @@ from datetime import datetime
 from rest_framework import serializers
 
 from apps.authentication.models import User
-from apps.personal_cabinet.models import PostCategory
+from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService
+from config.utils.api_exceptions import APIValidation
 
 
 class UserEntityPersonalDataSerializer(serializers.ModelSerializer):
@@ -114,9 +115,25 @@ class UserIndividualPersonalDataSerializer(serializers.ModelSerializer):
 
 
 class PostCategorySerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def validate_user(self, value):
+        user = value
+        user_type = None
+        if hasattr(user, 'user_entity'):
+            user_type = user.user_entity
+        elif hasattr(user, 'user_individual'):
+            user_type = user.user_individual
+        interested_subcategories = user_type.subcategory.values_list('id', flat=True)
+        subcategory = int(self.context['request'].data.get('subcategory'))
+        if subcategory in interested_subcategories:
+            return user
+        raise APIValidation("You are choosing wrong Category")
+
     class Meta:
         model = PostCategory
         fields = ['id',
+                  'category',
                   'subcategory',
                   'age',
                   'weight',
@@ -134,9 +151,26 @@ class PostCategorySerializer(serializers.ModelSerializer):
 
 
 class PostCatalogSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def validate_user(self, value):
+        user = value
+        user_type = None
+        if hasattr(user, 'user_entity'):
+            user_type = user.user_entity
+        elif hasattr(user, 'user_individual'):
+            user_type = user.user_individual
+        interested_subcatalogs = user_type.subcatalog.values_list('id', flat=True)
+        subcatalog = int(self.context['request'].data.get('subcatalog'))
+        if subcatalog in interested_subcatalogs:
+            return user
+        raise APIValidation("You are choosing wrong Catalog")
+
     class Meta:
-        model = PostCategory
-        fields = ['subcatalog',
+        model = PostCatalog
+        fields = ['id',
+                  'catalog',
+                  'subcatalog',
                   'volume',
                   'amount',
                   'price',
@@ -152,9 +186,26 @@ class PostCatalogSerializer(serializers.ModelSerializer):
 
 
 class PostServiceSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def validate_user(self, value):
+        user = value
+        user_type = None
+        if hasattr(user, 'user_entity'):
+            user_type = user.user_entity
+        elif hasattr(user, 'user_individual'):
+            user_type = user.user_individual
+        interested_subservices = user_type.subservice.values_list('id', flat=True)
+        subcatalog = int(self.context['request'].data.get('subcatalog'))
+        if subcatalog in interested_subservices:
+            return user
+        raise APIValidation("You are choosing wrong Service")
+
     class Meta:
-        model = PostCategory
-        fields = ['subservice',
+        model = PostService
+        fields = ['id',
+                  'service',
+                  'subservice',
                   'price',
                   'description_uz',
                   'description_ru',
