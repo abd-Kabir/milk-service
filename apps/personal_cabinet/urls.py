@@ -11,8 +11,8 @@ router.register(r'post-service', PostServiceModelViewSet, basename='post_service
 
 app_name = 'personal_cabinet'
 urlpatterns = [
-    path('personal/<str:username>/', PersonalDataRetrieveAPIView.as_view(), name='personal'),
-    path('update/<str:username>/', PersonalDataUpdateAPIView.as_view(), name='update'),
+    path('personal/', PersonalDataRetrieveAPIView.as_view(), name='personal'),
+    path('update/', PersonalDataUpdateAPIView.as_view(), name='update'),
     path('interests/', GetAllInterestsAPIView.as_view(), name='interests'),
 ]
 

@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView
 from rest_framework.parsers import MultiPartParser
@@ -38,6 +39,11 @@ class PersonalDataRetrieveAPIView(RetrieveAPIView):
         else:
             raise APIValidation("Bad request", status_code=status.HTTP_400_BAD_REQUEST)
 
+    def get_object(self):
+        if self.request.user.is_authenticated:
+            return self.request.user
+        raise Http404("User not found")
+
 
 class PersonalDataUpdateAPIView(UpdateAPIView):
     queryset = User.objects.all()
@@ -63,6 +69,11 @@ class PersonalDataUpdateAPIView(UpdateAPIView):
             return UserBuyerPersonalDataSerializer(args[0], data=kwargs['data'], partial=True)
         else:
             raise APIValidation("Bad request", status_code=status.HTTP_400_BAD_REQUEST)
+
+    def get_object(self):
+        if self.request.user.is_authenticated:
+            return self.request.user
+        raise Http404("User not found")
 
 
 class GetAllInterestsAPIView(APIView):
