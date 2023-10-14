@@ -232,7 +232,41 @@ class PostServiceSerializer(serializers.ModelSerializer):
                   'user', ]
 
 
-class CombinedPostSerializer(serializers.Serializer):
-    category = PostCategorySerializer(many=True)
-    catalog = PostCatalogSerializer(many=True)
-    service = PostServiceSerializer(many=True)
+class PostCategoryCombineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostCategory
+        fields = ['id',
+                  'description_uz',
+                  'description_ru',
+                  'description_en',
+                  'title_uz',
+                  'title_ru',
+                  'title_en',
+                  'photo', ]
+
+
+class PostCatalogCombineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostCatalog
+        fields = ['id',
+                  'description_uz',
+                  'description_ru',
+                  'description_en',
+                  'title_uz',
+                  'title_ru',
+                  'title_en',
+                  'photo', ]
+
+
+class PostServiceCombineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostService
+        fields = ['id',
+                  'description_uz',
+                  'description_ru',
+                  'description_en',
+                  'title_uz',
+                  'title_ru',
+                  'title_en',
+                  'photo', ]
+

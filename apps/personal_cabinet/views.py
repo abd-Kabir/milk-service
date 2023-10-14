@@ -1,7 +1,10 @@
+from random import shuffle
+
 from django.http import Http404
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView, ListAPIView
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -10,7 +13,8 @@ from apps.authentication.models import User
 from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService
 from apps.personal_cabinet.serializer import UserEntityPersonalDataSerializer, UserEntityServicePersonalDataSerializer, \
     UserBuyerPersonalDataSerializer, UserIndividualPersonalDataSerializer, PostCategorySerializer, \
-    PostCatalogSerializer, PostServiceSerializer, CombinedPostSerializer
+    PostCatalogSerializer, PostServiceSerializer, PostCategoryCombineSerializer, PostCatalogCombineSerializer, \
+    PostServiceCombineSerializer
 from config.utils.api_exceptions import APIValidation
 
 
@@ -121,19 +125,31 @@ class PostServiceModelViewSet(ModelViewSet):
         return PostService.objects.filter(user=self.request.user)
 
 
-class CombinedPostAPIView(ListAPIView):
-    serializer_class = CombinedPostSerializer
+class CombinedPostAPIView(APIView):
+    permission_classes = [AllowAny, ]
 
-    def get_queryset(self):
-        post_category = PostCategory.objects.all()
-        post_catalog = PostCatalog.objects.all()
-        post_service = PostService.objects.all()
+    def get(self, request):
+        types = request.query_params.get('type').split(',')
 
-        # Combine the data from the three models into a dictionary
-        combined_data = {
-            "model_a_data": post_category,
-            "model_b_data": post_catalog,
-            "model_c_data": post_service,
-        }
+        limit = int(request.query_params.get('limit', 12))
+        offset = int(request.query_params.get('offset', 0))
 
-        return [combined_data]
+        result = []
+        if 'category' in types:
+            queryset_category = PostCategory.objects.all()
+            serializer_category = PostCategoryCombineSerializer(queryset_category, many=True)
+            result.extend(serializer_category.data)
+
+        if 'catalog' in types:
+            queryset_catalog = PostCatalog.objects.all()
+            serializer_catalog = PostCatalogCombineSerializer(queryset_catalog, many=True)
+            result.extend(serializer_catalog.data)
+
+        if 'service' in types:
+            queryset_service = PostService.objects.all()
+            serializer_service = PostServiceCombineSerializer(queryset_service, many=True)
+            result.extend(serializer_service.data)
+
+        result = result[offset:offset + limit]
+        shuffle(result)
+        return Response(result)
