@@ -35,7 +35,7 @@ class UserAdminSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     email = serializers.EmailField()
     position = serializers.CharField(required=False)
-    group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', source='groups')
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), source='groups')
 
     def create(self, validated_data):
         username = validated_data.get('username')
