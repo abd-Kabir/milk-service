@@ -14,9 +14,18 @@ class UserEntityPersonalDataSerializer(serializers.ModelSerializer):
     gender_display = serializers.CharField(source='get_gender_display', read_only=True)
 
     def update(self, instance, validated_data):
-        instance.user_entity.position = validated_data.get('position')
-        instance.user_entity.updated_at = datetime.now()
-        instance.user_entity.save()
+        instance_user_entity = instance.user_entity
+        user_entity = validated_data.get('user_entity')
+        if user_entity:
+            instance_user_entity.position = user_entity.get('position', instance_user_entity.position)
+            instance_user_entity.company_name = user_entity.get('company_name', instance_user_entity.company_name)
+            instance_user_entity.position = user_entity.get('position', instance_user_entity.position)
+            instance_user_entity.updated_at = datetime.now()
+            instance_user_entity.save()
+            validated_data.pop('user_entity')
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
         return instance
 
     class Meta:
