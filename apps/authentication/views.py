@@ -64,7 +64,7 @@ class SignUpPersonalDataAPIView(APIView):
             user = serializer.save()
             return Response({"detail": "Continue registration step-by-step", 'user': user.username})
         except Exception as exc:
-            raise APIValidation("Bad request!", status_code=status.HTTP_400_BAD_REQUEST)
+            raise APIValidation(f"Bad request! Exception: {exc.args}", status_code=status.HTTP_400_BAD_REQUEST)
 
 
 class SignUpContactDataAPIView(APIView):
