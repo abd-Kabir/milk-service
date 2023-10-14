@@ -46,6 +46,12 @@ class BuyerSignUpFinalAPIView(APIView):
 
             refresh = RefreshToken.for_user(user)
             refresh['username'] = user.username
+            refresh['first_name'] = user.first_name
+            refresh['last_name'] = user.last_name
+            group = user.groups.all()
+            if group:
+                group = group.first()
+                refresh['group'] = group.name
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token)
@@ -180,6 +186,15 @@ class SignUpInterestsAPIView(APIView):
 
         refresh = RefreshToken.for_user(user)
         refresh['username'] = user.username
+        refresh['first_name'] = user.first_name
+        refresh['last_name'] = user.last_name
+        group = user.groups.all()
+        if group:
+            group = group.first()
+            refresh['group'] = group.name
+            refresh['subservice'] = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
+            refresh['subcatalog'] = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
+            refresh['subcategory'] = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token)
