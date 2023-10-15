@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers, status
 
-from apps.administration.models import UserAdministration, News, Banner
+from apps.administration.models import UserAdministration, News, Banner, AboutUs, Science
 from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
@@ -131,3 +131,34 @@ class BannerSerializer(serializers.ModelSerializer):
                   'description_ru',
                   'description_en',
                   'photo', ]
+
+
+# AboutUs
+class AboutUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AboutUs
+        fields = ['id',
+                  'created_at',
+                  'title_uz',
+                  'title_ru',
+                  'title_en',
+                  'description_uz',
+                  'description_ru',
+                  'description_en',
+                  'photo', ]
+
+
+# Science
+class ScienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Science
+        fields = ['id',
+                  'title_uz',
+                  'title_ru',
+                  'title_en',
+                  'description_uz',
+                  'description_ru',
+                  'description_en',
+                  'photo',
+                  'video',
+                  'file', ]

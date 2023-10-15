@@ -6,9 +6,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner, SubService
+from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner, SubService, \
+    AboutUs, Science
 from apps.administration.serializers.another_serializer import UserAdminSerializer, UserAdminGetSerializer, \
-    UserAdminRolesSerializer, NewsSerializer, BannerSerializer
+    UserAdminRolesSerializer, NewsSerializer, BannerSerializer, AboutUsSerializer, ScienceSerializer
 from apps.administration.serializers.catalog_serializer import CatalogSerializer, SubCatalogSerializer, \
     SubCatalogGetSerializer, CatalogSubCatalogSerializer
 from apps.administration.serializers.category_serializer import CategorySerializer, SubCategorySerializer, \
@@ -128,9 +129,25 @@ class NewsModelViewSet(ModelViewSet):
     permission_classes = [LandingPage, ]
 
 
-# News
+# Banner
 class BannerModelViewSet(ModelViewSet):
     queryset = Banner.objects.all()
     serializer_class = BannerSerializer
+    parser_classes = (MultiPartParser,)
+    permission_classes = [LandingPage, ]
+
+
+# AboutUs
+class AboutUsModelViewSet(ModelViewSet):
+    queryset = AboutUs.objects.all()
+    serializer_class = AboutUsSerializer
+    parser_classes = (MultiPartParser,)
+    permission_classes = [LandingPage, ]
+
+
+# Science
+class ScienceModelViewSet(ModelViewSet):
+    queryset = Science.objects.all()
+    serializer_class = ScienceSerializer
     parser_classes = (MultiPartParser,)
     permission_classes = [LandingPage, ]

@@ -14,7 +14,6 @@ ROLE_CHOICES = [
 Group.add_to_class('role', models.CharField(choices=ROLE_CHOICES, max_length=10, null=True, blank=True))
 
 
-
 class UserAdministration(BaseDatesModel):  # administration
     position = models.CharField(max_length=100, null=True, blank=True)
 
@@ -105,3 +104,31 @@ class Banner(BaseDatesModel):
 
     class Meta:
         db_table = 'Banner'
+
+
+class AboutUs(BaseDatesModel):
+    title_uz = models.CharField(max_length=255)
+    title_ru = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    description_uz = models.TextField()
+    description_ru = models.TextField()
+    description_en = models.TextField()
+    photo = models.FileField(upload_to=hash_filename)
+
+    class Meta:
+        db_table = 'AboutUs'
+
+
+class Science(BaseDatesModel):
+    title_uz = models.CharField(max_length=255)
+    title_ru = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    description_uz = models.TextField()
+    description_ru = models.TextField()
+    description_en = models.TextField()
+    video = models.TextField()
+    photo = models.FileField(upload_to=hash_filename)
+    file = models.FileField(upload_to=hash_filename)
+
+    class Meta:
+        db_table = 'Science'
