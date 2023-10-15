@@ -105,7 +105,7 @@ class PostCategoryModelViewSet(ModelViewSet):
     parser_classes = (MultiPartParser,)
 
     def get_queryset(self):
-        return PostCategory.objects.filter(user=self.request.user)
+        return PostCategory.objects.filter(user=self.request.user).order_by('-id')
 
 
 class PostCatalogModelViewSet(ModelViewSet):
@@ -114,7 +114,7 @@ class PostCatalogModelViewSet(ModelViewSet):
     parser_classes = (MultiPartParser,)
 
     def get_queryset(self):
-        return PostCatalog.objects.filter(user=self.request.user)
+        return PostCatalog.objects.filter(user=self.request.user).order_by('-id')
 
 
 class PostServiceModelViewSet(ModelViewSet):
@@ -123,7 +123,7 @@ class PostServiceModelViewSet(ModelViewSet):
     parser_classes = (MultiPartParser,)
 
     def get_queryset(self):
-        return PostService.objects.filter(user=self.request.user)
+        return PostService.objects.filter(user=self.request.user).order_by('-id')
 
 
 class CombinedPostAPIView(APIView):
