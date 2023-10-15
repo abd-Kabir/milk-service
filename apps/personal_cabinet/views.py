@@ -215,7 +215,7 @@ class ApplicationVerifyAPIView(APIView):
             raise APIValidation("Application with this id doesn't belongs you",
                                 status_code=status.HTTP_400_BAD_REQUEST)
 
-        app_status = 'ACCEPTED'
+        app_status = request.data.get('status')
         zoom_link = request.data.get('zoom_link')
         zoom_time = request.data.get('zoom_time')
 
