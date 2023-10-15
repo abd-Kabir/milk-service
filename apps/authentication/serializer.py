@@ -25,9 +25,15 @@ class JWTObtainPairSerializer(TokenObtainPairSerializer):
             elif hasattr(user, 'user_individual'):
                 user_type = user.user_individual
             if user_type:
-                token['subservice'] = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
-                token['subcatalog'] = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
-                token['subcategory'] = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
+                token['subservice'] = list(
+                    user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en', 'service',
+                                                'service__name_uz', 'service__name_ru', 'service__name_en'))
+                token['subcatalog'] = list(
+                    user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en', 'catalog',
+                                                'catalog__name_uz', 'catalog__name_ru', 'catalog__name_en'))
+                token['subcategory'] = list(
+                    user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en', 'category',
+                                                 'category__name_uz', 'category__name_ru', 'category__name_en'))
 
         return token
 
