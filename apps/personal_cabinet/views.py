@@ -207,9 +207,9 @@ class ApplicationListAPIView(ListAPIView):
 class ApplicationVerifyAPIView(APIView):
     def post(self, request, pk):
         user = request.user
-        user_category_posts = user.post_category.values_list('id', flat=True)
-        user_catalog_posts = user.post_catalog.values_list('id', flat=True)
-        user_service_posts = user.post_service.values_list('id', flat=True)
+        user_category_posts = user.post_category.values_list('applications', flat=True)
+        user_catalog_posts = user.post_catalog.values_list('applications', flat=True)
+        user_service_posts = user.post_service.values_list('applications', flat=True)
         user_posts = list(user_category_posts) + list(user_catalog_posts) + list(user_service_posts)
         if not (pk in user_posts):
             raise APIValidation("Application with this id doesn't belongs you",
@@ -220,25 +220,24 @@ class ApplicationVerifyAPIView(APIView):
         zoom_time = request.data.get('zoom_time')
 
         instance = get_object_or_404(Application, pk=pk)
-        if instance.app_type == 'ZOOM':
-            instance.zoom_link = zoom_link
-            instance.zoom_time = zoom_time
-            instance.status = app_status
-            instance.save()
-            return Response({
-                "id": instance.id,
-                "created_at": instance.created_at,
-                "status": instance.status,
-                "app_type": instance.app_type,
-                "phone_number": instance.phone_number,
-                "zoom_link": instance.zoom_link,
-                "zoom_time": instance.zoom_time
-            })
+        if instance.post_service:
+            if instance.post_service.service_type == 'ZOOM':
+                instance.zoom_link = zoom_link
+                instance.zoom_time = zoom_time
+                instance.status = app_status
+                instance.save()
+                return Response({
+                    "id": instance.id,
+                    "created_at": instance.created_at,
+                    "status": instance.status,
+                    "phone_number": instance.phone_number,
+                    "zoom_link": instance.zoom_link,
+                    "zoom_time": instance.zoom_time
+                })
         return Response({
             "id": instance.id,
             "created_at": instance.created_at,
             "status": instance.status,
-            "app_type": instance.app_type,
             "phone_number": instance.phone_number,
             "zoom_link": None,
             "zoom_time": None

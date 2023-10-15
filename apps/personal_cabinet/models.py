@@ -69,7 +69,7 @@ class PostService(BaseDatesModel):
         (PHONE, PHONE),
         (ZOOM, ZOOM),
     ]
-    service_type = models.CharField(max_length=7, choices=SERVICE_TYPE_CHOICE, default=OFFLINE)
+    service_type = models.CharField(max_length=7, choices=SERVICE_TYPE_CHOICE, default=PHONE)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_service')
 
