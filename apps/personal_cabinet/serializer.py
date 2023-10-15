@@ -249,6 +249,14 @@ class UserDataCombinePostSerializer(serializers.ModelSerializer):
 class PostCategoryCombineSerializer(serializers.ModelSerializer):
     user = UserDataCombinePostSerializer()
 
+    def to_representation(self, instance):
+        data = super(PostCategoryCombineSerializer, self).to_representation(instance)
+        user = self.context.get('request').user
+        if user.is_authenticated:
+            process_status = instance.applications.filter(buyer=user)[0].process_status
+            data['process_status'] = process_status
+        return data
+
     class Meta:
         model = PostCategory
         fields = ['id',
@@ -271,6 +279,14 @@ class PostCategoryCombineSerializer(serializers.ModelSerializer):
 class PostCatalogCombineSerializer(serializers.ModelSerializer):
     user = UserDataCombinePostSerializer()
 
+    def to_representation(self, instance):
+        data = super(PostCatalogCombineSerializer, self).to_representation(instance)
+        user = self.context.get('request').user
+        if user.is_authenticated:
+            process_status = instance.applications.filter(buyer=user)[0].process_status
+            data['process_status'] = process_status
+        return data
+
     class Meta:
         model = PostCatalog
         fields = ['id',
@@ -291,6 +307,14 @@ class PostCatalogCombineSerializer(serializers.ModelSerializer):
 
 class PostServiceCombineSerializer(serializers.ModelSerializer):
     user = UserDataCombinePostSerializer()
+
+    def to_representation(self, instance):
+        data = super(PostServiceCombineSerializer, self).to_representation(instance)
+        user = self.context.get('request').user
+        if user.is_authenticated:
+            process_status = instance.applications.filter(buyer=user)[0].process_status
+            data['process_status'] = process_status
+        return data
 
     class Meta:
         model = PostService
@@ -377,35 +401,35 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         post_category = validated_data.get('post_category')
         post_catalog = validated_data.get('post_catalog')
         post_service = validated_data.get('post_service')
-        try:
-            match post_type:
-                case 'CATEGORY':
-                    exists = Application.objects.filter(process_status=False, post_category=post_category, buyer=buyer)
-                    if exists:
-                        raise APIValidation("You have applied to this post, wait until your application is "
-                                            "processed or call the number indicated in the post", status_code=498)
-                    app = Application.objects.create(phone_number=phone_number,
-                                                     buyer=buyer,
-                                                     post_category=post_category)
-                case 'CATALOG':
-                    exists = Application.objects.filter(process_status=False, post_catalog=post_catalog, buyer=buyer)
-                    if exists:
-                        raise APIValidation("You have applied to this post, wait until your application is "
-                                            "processed or call the number indicated in the post", status_code=498)
-                    app = Application.objects.create(phone_number=phone_number,
-                                                     buyer=buyer,
-                                                     post_catalog=post_catalog)
-                case 'SERVICE':
-                    exists = Application.objects.filter(process_status=False, post_service=post_service, buyer=buyer)
-                    if exists:
-                        raise APIValidation("You have applied to this post, wait until your application is "
-                                            "processed or call the number indicated in the post", status_code=498)
-                    app = Application.objects.create(phone_number=phone_number,
-                                                     buyer=buyer,
-                                                     post_service=post_service)
-            return app
-        except:
-            raise APIValidation("post_type was not included", status_code=status.HTTP_400_BAD_REQUEST)
+        # try:
+        match post_type:
+            case 'CATEGORY':
+                exists = Application.objects.filter(process_status=False, post_category=post_category, buyer=buyer)
+                if exists:
+                    raise APIValidation("You have applied to this post, wait until your application is "
+                                        "processed or call the number indicated in the post", status_code=498)
+                app = Application.objects.create(phone_number=phone_number,
+                                                 buyer=buyer,
+                                                 post_category=post_category)
+            case 'CATALOG':
+                exists = Application.objects.filter(process_status=False, post_catalog=post_catalog, buyer=buyer)
+                if exists:
+                    raise APIValidation("You have applied to this post, wait until your application is "
+                                        "processed or call the number indicated in the post", status_code=498)
+                app = Application.objects.create(phone_number=phone_number,
+                                                 buyer=buyer,
+                                                 post_catalog=post_catalog)
+            case 'SERVICE':
+                exists = Application.objects.filter(process_status=False, post_service=post_service, buyer=buyer)
+                if exists:
+                    raise APIValidation("You have applied to this post, wait until your application is "
+                                        "processed or call the number indicated in the post", status_code=498)
+                app = Application.objects.create(phone_number=phone_number,
+                                                 buyer=buyer,
+                                                 post_service=post_service)
+        return app
+        # except:
+        #     raise APIValidation("post_type was not included", status_code=status.HTTP_400_BAD_REQUEST)
 
     class Meta:
         model = Application

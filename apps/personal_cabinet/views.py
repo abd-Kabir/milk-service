@@ -220,24 +220,28 @@ class ApplicationVerifyAPIView(APIView):
         zoom_time = request.data.get('zoom_time')
 
         instance = get_object_or_404(Application, pk=pk)
+        instance.status = app_status
+        instance.process_status = True
         if instance.post_service:
             if instance.post_service.service_type == 'ZOOM':
                 instance.zoom_link = zoom_link
                 instance.zoom_time = zoom_time
-                instance.status = app_status
                 instance.save()
                 return Response({
                     "id": instance.id,
                     "created_at": instance.created_at,
                     "status": instance.status,
+                    "process_status": instance.process_status,
                     "phone_number": instance.phone_number,
                     "zoom_link": instance.zoom_link,
                     "zoom_time": instance.zoom_time
                 })
+        instance.save()
         return Response({
             "id": instance.id,
             "created_at": instance.created_at,
             "status": instance.status,
+            "process_status": instance.process_status,
             "phone_number": instance.phone_number,
             "zoom_link": None,
             "zoom_time": None
