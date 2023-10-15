@@ -97,6 +97,7 @@ class Application(BaseDatesModel):
     app_type = models.CharField(max_length=10, choices=APPLICATION_TYPE, default=PHONE)
 
     zoom_link = models.TextField(null=True, blank=True)
+    zoom_time = models.DateTimeField(null=True, blank=True)
     phone_number = models.CharField(max_length=50, null=True, blank=True)
 
     post_category = models.ForeignKey(PostCategory,
