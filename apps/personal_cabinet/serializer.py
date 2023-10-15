@@ -253,8 +253,10 @@ class PostCategoryCombineSerializer(serializers.ModelSerializer):
         data = super(PostCategoryCombineSerializer, self).to_representation(instance)
         user = self.context.get('request').user
         if user.is_authenticated:
-            process_status = instance.applications.filter(buyer=user)[0].process_status
-            data['process_status'] = process_status
+            process_status = instance.applications.filter(buyer=user)
+            if process_status:
+                process_status = process_status[0].process_status
+                data['process_status'] = process_status
         return data
 
     class Meta:
@@ -283,8 +285,10 @@ class PostCatalogCombineSerializer(serializers.ModelSerializer):
         data = super(PostCatalogCombineSerializer, self).to_representation(instance)
         user = self.context.get('request').user
         if user.is_authenticated:
-            process_status = instance.applications.filter(buyer=user)[0].process_status
-            data['process_status'] = process_status
+            process_status = instance.applications.filter(buyer=user)
+            if process_status:
+                process_status = process_status[0].process_status
+                data['process_status'] = process_status
         return data
 
     class Meta:
@@ -312,8 +316,10 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
         data = super(PostServiceCombineSerializer, self).to_representation(instance)
         user = self.context.get('request').user
         if user.is_authenticated:
-            process_status = instance.applications.filter(buyer=user)[0].process_status
-            data['process_status'] = process_status
+            process_status = instance.applications.filter(buyer=user)
+            if process_status:
+                process_status = process_status[0].process_status
+                data['process_status'] = process_status
         return data
 
     class Meta:
