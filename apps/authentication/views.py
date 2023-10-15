@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.administration.models import SubCategory, SubCatalog, SubService
+from apps.administration.models import SubCategory, SubCatalog, SubService, Category
 from apps.authentication.models import User, VerifyCode
 from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
     SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, BuyerSignUpSerializer, BuyerSignUpFinalSerializer
@@ -192,9 +192,30 @@ class SignUpInterestsAPIView(APIView):
         if group:
             group = group.first()
             refresh['group'] = group.name
-            refresh['subservice'] = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
-            refresh['subcatalog'] = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
-            refresh['subcategory'] = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
+            if user_type:
+                interested_subservice = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
+                interested_subcatalog = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
+                interested_subcategory = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
+                category_ids = list(user_type.subcategory.values_list('category', flat=True).distinct())
+                category_data = Category.objects.filter(id__in=category_ids).values('id', 'name_uz',
+                                                                                    'name_ru', 'name_en')
+                for category in category_data:
+                    category['subcategory'] = interested_subcategory
+
+                catalog_ids = list(user_type.subcatalog.values_list('catalog', flat=True).distinct())
+                catalog_data = Category.objects.filter(id__in=catalog_ids).values('id', 'name_uz',
+                                                                                  'name_ru', 'name_en')
+                for catalog in catalog_data:
+                    catalog['subcatalog'] = interested_subcatalog
+
+                service_ids = list(user_type.subservice.values_list('service', flat=True).distinct())
+                service_data = Category.objects.filter(id__in=service_ids).values('id', 'name_uz',
+                                                                                  'name_ru', 'name_en')
+                for service in service_data:
+                    service['subservice'] = interested_subservice
+                refresh['category'] = list(category_data)
+                refresh['catalog'] = list(catalog_data)
+                refresh['service'] = list(service_data)
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token)
