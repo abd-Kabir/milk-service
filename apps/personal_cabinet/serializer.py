@@ -235,7 +235,20 @@ class PostServiceSerializer(serializers.ModelSerializer):
                   'user', ]
 
 
+class UserDataCombinePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['phone_number',
+                  'email',
+                  'avatar',
+                  'first_name',
+                  'last_name',
+                  'username', ]
+
+
 class PostCategoryCombineSerializer(serializers.ModelSerializer):
+    user = UserDataCombinePostSerializer()
+
     class Meta:
         model = PostCategory
         fields = ['id',
@@ -246,10 +259,13 @@ class PostCategoryCombineSerializer(serializers.ModelSerializer):
                   'title_uz',
                   'title_ru',
                   'title_en',
-                  'photo', ]
+                  'photo',
+                  'user', ]
 
 
 class PostCatalogCombineSerializer(serializers.ModelSerializer):
+    user = UserDataCombinePostSerializer()
+
     class Meta:
         model = PostCatalog
         fields = ['id',
@@ -260,10 +276,13 @@ class PostCatalogCombineSerializer(serializers.ModelSerializer):
                   'title_uz',
                   'title_ru',
                   'title_en',
-                  'photo', ]
+                  'photo',
+                  'user', ]
 
 
 class PostServiceCombineSerializer(serializers.ModelSerializer):
+    user = UserDataCombinePostSerializer()
+
     class Meta:
         model = PostService
         fields = ['id',
@@ -274,7 +293,8 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
                   'title_uz',
                   'title_ru',
                   'title_en',
-                  'photo', ]
+                  'photo',
+                  'user', ]
 
 
 class ApplicationListSerializer(serializers.ModelSerializer):
