@@ -347,14 +347,21 @@ class ApplicationListSerializer(serializers.ModelSerializer):
         if post_category:
             data['post_id'] = post_category.id
             data['post_type'] = 'CATEGORY'
+            data['post_photo'] = self.context['request'].build_absolute_uri(post_category.photo.url)
         post_catalog = instance.post_catalog
         if post_catalog:
             data['post_id'] = post_catalog.id
             data['post_type'] = 'CATALOG'
+            data['post_photo'] = self.context['request'].build_absolute_uri(post_catalog.photo.url)
         post_service = instance.post_service
         if post_service:
             data['post_id'] = post_service.id
             data['post_type'] = 'SERVICE'
+            data['service_type'] = post_service.service_type
+            if post_service.service_type == "ZOOM":
+                data['zoom_link'] = instance.zoom_link
+                data['zoom_time'] = instance.zoom_time
+            data['post_photo'] = self.context['request'].build_absolute_uri(post_service.photo.url)
         return data
 
     class Meta:
@@ -375,6 +382,9 @@ class ApplicationBuyerListSerializer(serializers.ModelSerializer):
         post_service = instance.post_service
         if post_category:
             data['post'] = {
+                'photo': self.context['request'].build_absolute_uri(post_category.photo.url),
+                'id': post_category.id,
+                'type': "CATEGORY",
                 'description_uz': post_category.description_uz,
                 'description_ru': post_category.description_ru,
                 'description_en': post_category.description_en,
@@ -384,6 +394,9 @@ class ApplicationBuyerListSerializer(serializers.ModelSerializer):
             }
         elif post_catalog:
             data['post'] = {
+                'photo': self.context['request'].build_absolute_uri(post_catalog.photo.url),
+                'id': post_catalog.id,
+                'type': "CATALOG",
                 'description_uz': post_catalog.description_uz,
                 'description_ru': post_catalog.description_ru,
                 'description_en': post_catalog.description_en,
@@ -393,6 +406,9 @@ class ApplicationBuyerListSerializer(serializers.ModelSerializer):
             }
         elif post_service:
             data['post'] = {
+                'photo': self.context['request'].build_absolute_uri(post_service.photo.url),
+                'id': post_service.id,
+                'type': "SERVICE",
                 'description_uz': post_service.description_uz,
                 'description_ru': post_service.description_ru,
                 'description_en': post_service.description_en,
