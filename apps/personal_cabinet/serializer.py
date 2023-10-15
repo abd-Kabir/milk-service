@@ -333,6 +333,24 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
 
 
 class ApplicationListSerializer(serializers.ModelSerializer):
+    buyer = UserDataCombinePostSerializer()
+
+    def to_representation(self, instance):
+        data = super(ApplicationListSerializer, self).to_representation(instance)
+        post_category = instance.post_category
+        if post_category:
+            data['post_id'] = post_category.id
+            data['post_type'] = 'CATEGORY'
+        post_catalog = instance.post_catalog
+        if post_catalog:
+            data['post_id'] = post_catalog.id
+            data['post_type'] = 'CATALOG'
+        post_service = instance.post_service
+        if post_service:
+            data['post_id'] = post_service.id
+            data['post_type'] = 'SERVICE'
+        return data
+
     class Meta:
         model = Application
         fields = ['id',
