@@ -288,6 +288,54 @@ class ApplicationListSerializer(serializers.ModelSerializer):
                   'buyer', ]
 
 
+class ApplicationBuyerListSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        data = super(ApplicationBuyerListSerializer, self).to_representation(instance)
+
+        post_category = instance.post_category
+        post_catalog = instance.post_catalog
+        post_service = instance.post_service
+        if post_category:
+            data['post'] = {
+                'description_uz': post_category.description_uz,
+                'description_ru': post_category.description_ru,
+                'description_en': post_category.description_en,
+                'title_uz': post_category.title_uz,
+                'title_ru': post_category.title_ru,
+                'title_en': post_category.title_en
+            }
+        elif post_catalog:
+            data['post'] = {
+                'description_uz': post_catalog.description_uz,
+                'description_ru': post_catalog.description_ru,
+                'description_en': post_catalog.description_en,
+                'title_uz': post_catalog.title_uz,
+                'title_ru': post_catalog.title_ru,
+                'title_en': post_catalog.title_en
+            }
+        elif post_service:
+            data['post'] = {
+                'description_uz': post_service.description_uz,
+                'description_ru': post_service.description_ru,
+                'description_en': post_service.description_en,
+                'title_uz': post_service.title_uz,
+                'title_ru': post_service.title_ru,
+                'title_en': post_service.title_en
+            }
+        else:
+            data['post'] = None
+        return data
+
+    class Meta:
+        model = Application
+        fields = ['id',
+                  'created_at',
+                  'app_type',
+                  'status',
+                  'phone_number',
+                  'buyer', ]
+
+
 class ApplicationCreateSerializer(serializers.ModelSerializer):
     buyer = serializers.HiddenField(default=serializers.CurrentUserDefault())
     post_type = serializers.CharField(allow_null=True)

@@ -15,7 +15,7 @@ from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService,
 from apps.personal_cabinet.serializer import UserEntityPersonalDataSerializer, UserEntityServicePersonalDataSerializer, \
     UserBuyerPersonalDataSerializer, UserIndividualPersonalDataSerializer, PostCategorySerializer, \
     PostCatalogSerializer, PostServiceSerializer, PostCategoryCombineSerializer, PostCatalogCombineSerializer, \
-    PostServiceCombineSerializer, ApplicationCreateSerializer, ApplicationListSerializer
+    PostServiceCombineSerializer, ApplicationCreateSerializer, ApplicationListSerializer, ApplicationBuyerListSerializer
 from config.utils.api_exceptions import APIValidation
 
 
@@ -204,7 +204,7 @@ class ApplicationListAPIView(ListAPIView):
                                           Q(post_service__user=self.request.user))
 
 
-class ApplicationApply(APIView):
+class ApplicationVerifyAPIView(APIView):
     def post(self, request, pk):
         user = request.user
         user_category_posts = user.post_category.values_list('id', flat=True)
@@ -229,6 +229,7 @@ class ApplicationApply(APIView):
                 "id": instance.id,
                 "created_at": instance.created_at,
                 "status": instance.status,
+                "app_type": instance.app_type,
                 "phone_number": instance.phone_number,
                 "zoom_link": instance.zoom_link,
                 "zoom_time": instance.zoom_time
@@ -237,5 +238,15 @@ class ApplicationApply(APIView):
             "id": instance.id,
             "created_at": instance.created_at,
             "status": instance.status,
-            "phone_number": instance.phone_number
+            "app_type": instance.app_type,
+            "phone_number": instance.phone_number,
+            "zoom_link": None,
+            "zoom_time": None
         })
+
+
+class OwnApplicationsAPIView(ListAPIView):
+    serializer_class = ApplicationBuyerListSerializer
+
+    def get_queryset(self):
+        return Application.objects.filter(buyer=self.request.user)
