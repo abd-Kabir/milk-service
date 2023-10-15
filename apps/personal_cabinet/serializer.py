@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from rest_framework import serializers
+from rest_framework import serializers, status
 
 from apps.authentication.models import User
 from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService, Application
@@ -124,7 +124,6 @@ class UserIndividualPersonalDataSerializer(serializers.ModelSerializer):
                   'gender_display',
                   'birthday',
                   'avatar',
-                  # 'avatar_url',
                   'service_certificate',
                   'description', ]
 
@@ -276,8 +275,45 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
 
 
 class ApplicationCreateSerializer(serializers.ModelSerializer):
+    buyer = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    post_type = serializers.CharField(allow_null=True)
+
+    def create(self, validated_data):
+        app_type = validated_data.get('app_type')
+        phone_number = validated_data.get('phone_number')
+        buyer = validated_data.get('buyer')
+        post_type = validated_data.get('post_type')
+
+        post_category = validated_data.get('post_category')
+        post_catalog = validated_data.get('post_catalog')
+        post_service = validated_data.get('post_service')
+        try:
+            match post_type:
+                case 'CATEGORY':
+                    app = Application.objects.create(app_type=app_type,
+                                                     phone_number=phone_number,
+                                                     buyer=buyer,
+                                                     post_category=post_category)
+                case 'CATALOG':
+                    app = Application.objects.create(app_type=app_type,
+                                                     phone_number=phone_number,
+                                                     buyer=buyer,
+                                                     post_catalog=post_catalog)
+                case 'SERVICE':
+                    app = Application.objects.create(app_type=app_type,
+                                                     phone_number=phone_number,
+                                                     buyer=buyer,
+                                                     post_service=post_service)
+            return app
+        except:
+            raise APIValidation("post_type was not included", status_code=status.HTTP_400_BAD_REQUEST)
+
     class Meta:
         model = Application
-        fields = ['id',
-                  'type',
-                  ]
+        fields = ['post_category',
+                  'post_catalog',
+                  'post_service',
+                  'app_type',
+                  'phone_number',
+                  'buyer',
+                  'post_type', ]

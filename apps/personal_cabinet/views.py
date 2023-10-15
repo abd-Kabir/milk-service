@@ -14,7 +14,7 @@ from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService,
 from apps.personal_cabinet.serializer import UserEntityPersonalDataSerializer, UserEntityServicePersonalDataSerializer, \
     UserBuyerPersonalDataSerializer, UserIndividualPersonalDataSerializer, PostCategorySerializer, \
     PostCatalogSerializer, PostServiceSerializer, PostCategoryCombineSerializer, PostCatalogCombineSerializer, \
-    PostServiceCombineSerializer
+    PostServiceCombineSerializer, ApplicationCreateSerializer
 from config.utils.api_exceptions import APIValidation
 
 
@@ -129,32 +129,38 @@ class CombinedPostAPIView(APIView):
     permission_classes = [AllowAny, ]
 
     def get(self, request):
-        types = request.query_params.get('type').split(',')
+        types = request.query_params.get('type')
 
         limit = int(request.query_params.get('limit', 12))
         offset = int(request.query_params.get('offset', 0))
 
-        result = []
-        if 'category' in types:
-            queryset_category = PostCategory.objects.all()
-            serializer_category = PostCategoryCombineSerializer(queryset_category, many=True)
-            result.extend(serializer_category.data)
+        queryset_category = PostCategory.objects.all()
+        serializer_category = PostCategoryCombineSerializer(queryset_category, many=True,
+                                                            context={'request': self.request})
 
-        if 'catalog' in types:
-            queryset_catalog = PostCatalog.objects.all()
-            serializer_catalog = PostCatalogCombineSerializer(queryset_catalog, many=True)
-            result.extend(serializer_catalog.data)
+        queryset_catalog = PostCatalog.objects.all()
+        serializer_catalog = PostCatalogCombineSerializer(queryset_catalog, many=True,
+                                                          context={'request': self.request})
 
-        if 'service' in types:
-            queryset_service = PostService.objects.all()
-            serializer_service = PostServiceCombineSerializer(queryset_service, many=True)
-            result.extend(serializer_service.data)
-
-        result = result[offset:offset + limit]
-        shuffle(result)
+        queryset_service = PostService.objects.all()
+        serializer_service = PostServiceCombineSerializer(queryset_service, many=True,
+                                                          context={'request': self.request})
+        if types:
+            types = types.split(',')
+            result = []
+            if 'category' in types:
+                result.extend(serializer_category.data)
+            if 'catalog' in types:
+                result.extend(serializer_catalog.data)
+            if 'service' in types:
+                result.extend(serializer_service.data)
+            result = result[offset:offset + limit]
+            shuffle(result)
+        else:
+            result = serializer_category.data + serializer_catalog.data + serializer_service.data
         return Response(result)
 
 
 class ApplicationCreateAPIView(CreateAPIView):
     queryset = Application.objects.all()
-    # serializer_class = ApplicationCreateSerializer
+    serializer_class = ApplicationCreateSerializer

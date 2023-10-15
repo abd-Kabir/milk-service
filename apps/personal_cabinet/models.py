@@ -94,7 +94,7 @@ class Application(BaseDatesModel):
         (PHONE, PHONE),
         (OFFLINE, OFFLINE),
     ]
-    type = models.CharField(max_length=10, choices=APPLICATION_TYPE, default=PHONE)
+    app_type = models.CharField(max_length=10, choices=APPLICATION_TYPE, default=PHONE)
 
     zoom_link = models.TextField(null=True, blank=True)
     phone_number = models.CharField(max_length=50, null=True, blank=True)

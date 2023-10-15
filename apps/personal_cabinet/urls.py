@@ -2,7 +2,8 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from apps.personal_cabinet.views import PersonalDataRetrieveAPIView, PersonalDataUpdateAPIView, \
-    PostCategoryModelViewSet, PostServiceModelViewSet, PostCatalogModelViewSet, CombinedPostAPIView
+    PostCategoryModelViewSet, PostServiceModelViewSet, PostCatalogModelViewSet, CombinedPostAPIView, \
+    ApplicationCreateAPIView
 
 router = DefaultRouter()
 router.register(r'post-category', PostCategoryModelViewSet, basename='post_category')
@@ -15,6 +16,7 @@ urlpatterns = [
     path('update/', PersonalDataUpdateAPIView.as_view(), name='update'),
     # path('interests/', GetInterestsAPIView.as_view(), name='interests'),
     path('combined-posts/', CombinedPostAPIView.as_view(), name='combined_posts'),
+    path('apply/', ApplicationCreateAPIView.as_view(), name='apply'),
 ]
 
 urlpatterns += router.urls
