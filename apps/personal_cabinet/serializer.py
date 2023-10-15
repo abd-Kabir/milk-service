@@ -212,7 +212,7 @@ class PostServiceSerializer(serializers.ModelSerializer):
         elif hasattr(user, 'user_individual'):
             user_type = user.user_individual
         interested_subservices = user_type.subservice.values_list('id', flat=True)
-        subcatalog = int(self.context['request'].data.get('subcatalog'))
+        subcatalog = int(self.context['request'].data.get('subservice'))
         if subcatalog in interested_subservices:
             return user
         raise APIValidation("You are choosing wrong Service")

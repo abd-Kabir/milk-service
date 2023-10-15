@@ -119,7 +119,7 @@ class PostCatalogModelViewSet(ModelViewSet):
 
 class PostServiceModelViewSet(ModelViewSet):
     queryset = PostService.objects.all()
-    serializer_class = PostServiceSerializer
+    serializer_class = PostServiaceSerializer
     parser_classes = (MultiPartParser,)
 
     def get_queryset(self):
@@ -162,9 +162,9 @@ class CombinedPostAPIView(APIView):
             if 'service' in types:
                 result.extend(service_data)
             result = result[offset:offset + limit]
-            shuffle(result)
         else:
             result = category_data + catalog_data + service_data
+        shuffle(result)
         return Response(result)
 
 
