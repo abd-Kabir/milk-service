@@ -1,5 +1,6 @@
 from random import shuffle
 
+from django.db.models import Q
 from django.http import Http404
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView, ListAPIView, CreateAPIView, get_object_or_404
@@ -195,8 +196,12 @@ class ApplicationCreateAPIView(CreateAPIView):
 
 
 class ApplicationListAPIView(ListAPIView):
-    queryset = Application.objects.all()
     serializer_class = ApplicationListSerializer
+
+    def get_queryset(self):
+        return Application.objects.filter(Q(post_category__user=self.request.user) |
+                                          Q(post_catalog__user=self.request.user) |
+                                          Q(post_service__user=self.request.user))
 
 
 class ApplicationApply(APIView):
