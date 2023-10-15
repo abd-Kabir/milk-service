@@ -119,7 +119,7 @@ class PostCatalogModelViewSet(ModelViewSet):
 
 class PostServiceModelViewSet(ModelViewSet):
     queryset = PostService.objects.all()
-    serializer_class = PostServiaceSerializer
+    serializer_class = PostServiceSerializer
     parser_classes = (MultiPartParser,)
 
     def get_queryset(self):
