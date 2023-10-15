@@ -3,7 +3,7 @@ from datetime import datetime
 from rest_framework import serializers
 
 from apps.authentication.models import User
-from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService
+from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService, Application
 from config.utils.api_exceptions import APIValidation
 
 
@@ -273,3 +273,11 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
                   'title_ru',
                   'title_en',
                   'photo', ]
+
+
+class ApplicationCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ['id',
+                  'type',
+                  ]

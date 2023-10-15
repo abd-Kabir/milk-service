@@ -2,7 +2,7 @@ from random import shuffle
 
 from django.http import Http404
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView, UpdateAPIView, ListAPIView
+from rest_framework.generics import RetrieveAPIView, UpdateAPIView, ListAPIView, CreateAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.authentication.models import User
-from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService
+from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService, Application
 from apps.personal_cabinet.serializer import UserEntityPersonalDataSerializer, UserEntityServicePersonalDataSerializer, \
     UserBuyerPersonalDataSerializer, UserIndividualPersonalDataSerializer, PostCategorySerializer, \
     PostCatalogSerializer, PostServiceSerializer, PostCategoryCombineSerializer, PostCatalogCombineSerializer, \
@@ -80,22 +80,22 @@ class PersonalDataUpdateAPIView(UpdateAPIView):
         raise Http404("User not found")
 
 
-class GetInterestsAPIView(APIView):
-    def get(self, request):
-        user = request.user
-        user_type = None
-        if hasattr(user, 'user_entity'):
-            user_type = user.user_entity
-        elif hasattr(user, 'user_individual'):
-            user_type = user.user_individual
-        subservice = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
-        subcatalog = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
-        subcategory = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
-        return Response({
-            "subservice": subservice,
-            "subcatalog": subcatalog,
-            "subcategory": subcategory
-        })
+# class GetInterestsAPIView(APIView):
+#     def get(self, request):
+#         user = request.user
+#         user_type = None
+#         if hasattr(user, 'user_entity'):
+#             user_type = user.user_entity
+#         elif hasattr(user, 'user_individual'):
+#             user_type = user.user_individual
+#         subservice = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
+#         subcatalog = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
+#         subcategory = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
+#         return Response({
+#             "subservice": subservice,
+#             "subcatalog": subcatalog,
+#             "subcategory": subcategory
+#         })
 
 
 class PostCategoryModelViewSet(ModelViewSet):
@@ -154,4 +154,7 @@ class CombinedPostAPIView(APIView):
         shuffle(result)
         return Response(result)
 
-# class Application
+
+class ApplicationCreateAPIView(CreateAPIView):
+    queryset = Application.objects.all()
+    # serializer_class = ApplicationCreateSerializer
