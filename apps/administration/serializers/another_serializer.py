@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers, status
 
-from apps.administration.models import UserAdministration, News, Banner, AboutUs, Science
+from apps.administration.models import UserAdministration, News, Banner, AboutUs, Science, VetCategory, VetSubCategory
 from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
@@ -162,3 +162,17 @@ class ScienceSerializer(serializers.ModelSerializer):
                   'photo',
                   'video',
                   'file', ]
+
+
+# Vet
+class VetCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VetCategory
+        fields = ['id',
+                  'category_name', ]
+
+
+class VetSubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VetSubCategory
+        fields = '__all__'

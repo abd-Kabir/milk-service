@@ -132,3 +132,29 @@ class Science(BaseDatesModel):
 
     class Meta:
         db_table = 'Science'
+
+
+class VetCategory(BaseDatesModel):
+    category_name = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'VetCategory'
+
+
+class VetSubCategory(BaseDatesModel):
+    title_uz = models.CharField(max_length=255)
+    title_ru = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    description_uz = models.TextField()
+    description_ru = models.TextField()
+    description_en = models.TextField()
+    address = models.TextField()
+    phone_number = models.CharField(max_length=20, unique=True)
+    price = models.CharField(max_length=20)
+    organization_name = models.CharField(max_length=255, null=True, blank=True)
+    file = models.FileField(upload_to=hash_filename, null=True, blank=True)
+
+    vet_category = models.ForeignKey(VetCategory, on_delete=models.CASCADE, related_name='vet_subcategory')
+
+    class Meta:
+        db_table = 'VetSubCategory'
