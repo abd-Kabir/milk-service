@@ -416,6 +416,9 @@ class ApplicationBuyerListSerializer(serializers.ModelSerializer):
                 'title_ru': post_service.title_ru,
                 'title_en': post_service.title_en
             }
+            if post_service.service_type == "ZOOM":
+                data['zoom_link'] = instance.zoom_link
+                data['zoom_time'] = instance.zoom_time
         else:
             data['post'] = None
         return data
