@@ -87,7 +87,7 @@ class Application(BaseDatesModel):
         (WAITING, WAITING),
     ]
     status = models.CharField(max_length=255, choices=APPLICATION_STATUS, default=WAITING)
-
+    process_status = models.BooleanField(default=False)
     zoom_link = models.TextField(null=True, blank=True)
     zoom_time = models.DateTimeField(null=True, blank=True)
     phone_number = models.CharField(max_length=50, null=True, blank=True)

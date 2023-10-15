@@ -380,14 +380,26 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         try:
             match post_type:
                 case 'CATEGORY':
+                    exists = Application.objects.filter(process_status=False, post_category=post_category)
+                    if exists:
+                        raise APIValidation("You have applied to this post, wait until your application is "
+                                            "processed or call the number indicated in the post", status_code=498)
                     app = Application.objects.create(phone_number=phone_number,
                                                      buyer=buyer,
                                                      post_category=post_category)
                 case 'CATALOG':
+                    exists = Application.objects.filter(process_status=False, post_catalog=post_catalog)
+                    if exists:
+                        raise APIValidation("You have applied to this post, wait until your application is "
+                                            "processed or call the number indicated in the post", status_code=498)
                     app = Application.objects.create(phone_number=phone_number,
                                                      buyer=buyer,
                                                      post_catalog=post_catalog)
                 case 'SERVICE':
+                    exists = Application.objects.filter(process_status=False, post_service=post_service)
+                    if exists:
+                        raise APIValidation("You have applied to this post, wait until your application is "
+                                            "processed or call the number indicated in the post", status_code=498)
                     app = Application.objects.create(phone_number=phone_number,
                                                      buyer=buyer,
                                                      post_service=post_service)
