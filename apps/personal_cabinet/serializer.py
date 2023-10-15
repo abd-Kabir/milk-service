@@ -260,6 +260,7 @@ class PostCategoryCombineSerializer(serializers.ModelSerializer):
                   'title_ru',
                   'title_en',
                   'photo',
+                  'price',
                   'user', ]
 
 
@@ -277,6 +278,7 @@ class PostCatalogCombineSerializer(serializers.ModelSerializer):
                   'title_ru',
                   'title_en',
                   'photo',
+                  'price',
                   'user', ]
 
 
@@ -294,6 +296,7 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
                   'title_ru',
                   'title_en',
                   'photo',
+                  'price',
                   'user', ]
 
 
