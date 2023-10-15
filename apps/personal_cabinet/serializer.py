@@ -259,6 +259,10 @@ class PostCategoryCombineSerializer(serializers.ModelSerializer):
                   'title_uz',
                   'title_ru',
                   'title_en',
+                  'age',
+                  'weight',
+                  'amount',
+                  'address',
                   'photo',
                   'price',
                   'user', ]
@@ -277,6 +281,9 @@ class PostCatalogCombineSerializer(serializers.ModelSerializer):
                   'title_uz',
                   'title_ru',
                   'title_en',
+                  'volume',
+                  'amount',
+                  'address',
                   'photo',
                   'price',
                   'user', ]
@@ -297,6 +304,7 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
                   'title_en',
                   'photo',
                   'price',
+                  'service_type',
                   'user', ]
 
 
@@ -305,7 +313,6 @@ class ApplicationListSerializer(serializers.ModelSerializer):
         model = Application
         fields = ['id',
                   'created_at',
-                  'app_type',
                   'status',
                   'phone_number',
                   'buyer', ]
@@ -353,7 +360,6 @@ class ApplicationBuyerListSerializer(serializers.ModelSerializer):
         model = Application
         fields = ['id',
                   'created_at',
-                  'app_type',
                   'status',
                   'phone_number',
                   'buyer', ]
@@ -364,7 +370,6 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
     post_type = serializers.CharField(allow_null=True)
 
     def create(self, validated_data):
-        app_type = validated_data.get('app_type')
         phone_number = validated_data.get('phone_number')
         buyer = validated_data.get('buyer')
         post_type = validated_data.get('post_type')
@@ -375,18 +380,15 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         try:
             match post_type:
                 case 'CATEGORY':
-                    app = Application.objects.create(app_type=app_type,
-                                                     phone_number=phone_number,
+                    app = Application.objects.create(phone_number=phone_number,
                                                      buyer=buyer,
                                                      post_category=post_category)
                 case 'CATALOG':
-                    app = Application.objects.create(app_type=app_type,
-                                                     phone_number=phone_number,
+                    app = Application.objects.create(phone_number=phone_number,
                                                      buyer=buyer,
                                                      post_catalog=post_catalog)
                 case 'SERVICE':
-                    app = Application.objects.create(app_type=app_type,
-                                                     phone_number=phone_number,
+                    app = Application.objects.create(phone_number=phone_number,
                                                      buyer=buyer,
                                                      post_service=post_service)
             return app
@@ -398,7 +400,6 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         fields = ['post_category',
                   'post_catalog',
                   'post_service',
-                  'app_type',
                   'phone_number',
                   'buyer',
                   'post_type', ]

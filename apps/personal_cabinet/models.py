@@ -80,21 +80,13 @@ class PostService(BaseDatesModel):
 class Application(BaseDatesModel):
     ACCEPTED = "ACCEPTED"
     WAITING = "WAITING"
+    REJECTED = "REJECTED"
     APPLICATION_STATUS = [
         (ACCEPTED, ACCEPTED),
+        (REJECTED, REJECTED),
         (WAITING, WAITING),
     ]
     status = models.CharField(max_length=255, choices=APPLICATION_STATUS, default=WAITING)
-
-    ZOOM = "ZOOM"
-    PHONE = "PHONE"
-    OFFLINE = "OFFLINE"
-    APPLICATION_TYPE = [
-        (ZOOM, ZOOM),
-        (PHONE, PHONE),
-        (OFFLINE, OFFLINE),
-    ]
-    app_type = models.CharField(max_length=10, choices=APPLICATION_TYPE, default=PHONE)
 
     zoom_link = models.TextField(null=True, blank=True)
     zoom_time = models.DateTimeField(null=True, blank=True)
