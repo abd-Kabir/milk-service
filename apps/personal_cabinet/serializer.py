@@ -380,7 +380,7 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         try:
             match post_type:
                 case 'CATEGORY':
-                    exists = Application.objects.filter(process_status=False, post_category=post_category)
+                    exists = Application.objects.filter(process_status=False, post_category=post_category, buyer=buyer)
                     if exists:
                         raise APIValidation("You have applied to this post, wait until your application is "
                                             "processed or call the number indicated in the post", status_code=498)
@@ -388,7 +388,7 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
                                                      buyer=buyer,
                                                      post_category=post_category)
                 case 'CATALOG':
-                    exists = Application.objects.filter(process_status=False, post_catalog=post_catalog)
+                    exists = Application.objects.filter(process_status=False, post_catalog=post_catalog, buyer=buyer)
                     if exists:
                         raise APIValidation("You have applied to this post, wait until your application is "
                                             "processed or call the number indicated in the post", status_code=498)
@@ -396,7 +396,7 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
                                                      buyer=buyer,
                                                      post_catalog=post_catalog)
                 case 'SERVICE':
-                    exists = Application.objects.filter(process_status=False, post_service=post_service)
+                    exists = Application.objects.filter(process_status=False, post_service=post_service, buyer=buyer)
                     if exists:
                         raise APIValidation("You have applied to this post, wait until your application is "
                                             "processed or call the number indicated in the post", status_code=498)
