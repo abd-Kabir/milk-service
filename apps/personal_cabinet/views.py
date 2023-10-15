@@ -2,7 +2,7 @@ from random import shuffle
 
 from django.http import Http404
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView, UpdateAPIView, ListAPIView, CreateAPIView
+from rest_framework.generics import RetrieveAPIView, UpdateAPIView, ListAPIView, CreateAPIView, get_object_or_404
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -14,7 +14,7 @@ from apps.personal_cabinet.models import PostCategory, PostCatalog, PostService,
 from apps.personal_cabinet.serializer import UserEntityPersonalDataSerializer, UserEntityServicePersonalDataSerializer, \
     UserBuyerPersonalDataSerializer, UserIndividualPersonalDataSerializer, PostCategorySerializer, \
     PostCatalogSerializer, PostServiceSerializer, PostCategoryCombineSerializer, PostCatalogCombineSerializer, \
-    PostServiceCombineSerializer, ApplicationCreateSerializer
+    PostServiceCombineSerializer, ApplicationCreateSerializer, ApplicationListSerializer
 from config.utils.api_exceptions import APIValidation
 
 
@@ -137,30 +137,68 @@ class CombinedPostAPIView(APIView):
         queryset_category = PostCategory.objects.all()
         serializer_category = PostCategoryCombineSerializer(queryset_category, many=True,
                                                             context={'request': self.request})
+        category_data = serializer_category.data
+        category_data = [{**item, 'post_type': 'CATEGORY'} for item in category_data]
 
         queryset_catalog = PostCatalog.objects.all()
         serializer_catalog = PostCatalogCombineSerializer(queryset_catalog, many=True,
                                                           context={'request': self.request})
+        catalog_data = serializer_catalog.data
+        catalog_data = [{**item, 'post_type': 'CATALOG'} for item in catalog_data]
 
         queryset_service = PostService.objects.all()
         serializer_service = PostServiceCombineSerializer(queryset_service, many=True,
                                                           context={'request': self.request})
+        service_data = serializer_service.data
+        service_data = [{**item, 'post_type': 'SERVICE'} for item in service_data]
         if types:
             types = types.split(',')
             result = []
             if 'category' in types:
-                result.extend(serializer_category.data)
+                result.extend(category_data)
             if 'catalog' in types:
-                result.extend(serializer_catalog.data)
+                result.extend(catalog_data)
             if 'service' in types:
-                result.extend(serializer_service.data)
+                result.extend(service_data)
             result = result[offset:offset + limit]
             shuffle(result)
         else:
-            result = serializer_category.data + serializer_catalog.data + serializer_service.data
+            result = category_data + catalog_data + service_data
         return Response(result)
+
+
+class CombinedPostRetrieve(APIView):
+    permission_classes = [AllowAny, ]
+
+    def get(self, request, pk):
+        post_type = request.query_params.get('post_type', None)
+        if not post_type:
+            raise APIValidation("post_type was not included")
+        match post_type:
+            case 'CATEGORY':
+                instance = get_object_or_404(PostCategory, pk=pk)
+                serializer = PostCategoryCombineSerializer(instance, context={'request': self.request})
+
+            case 'CATALOG':
+                instance = get_object_or_404(PostCatalog, pk=pk)
+                serializer = PostCatalogCombineSerializer(instance, context={'request': self.request})
+
+            case 'SERVICE':
+                instance = get_object_or_404(PostService, pk=pk)
+                serializer = PostServiceCombineSerializer(instance, context={'request': self.request})
+        return Response(serializer.data)
 
 
 class ApplicationCreateAPIView(CreateAPIView):
     queryset = Application.objects.all()
     serializer_class = ApplicationCreateSerializer
+
+
+class ApplicationListAPIView(ListAPIView):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationListSerializer
+
+
+class ApplicationApply(APIView):
+    def post(self, request):
+        return Response()

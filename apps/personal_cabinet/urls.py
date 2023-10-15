@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from apps.personal_cabinet.views import PersonalDataRetrieveAPIView, PersonalDataUpdateAPIView, \
     PostCategoryModelViewSet, PostServiceModelViewSet, PostCatalogModelViewSet, CombinedPostAPIView, \
-    ApplicationCreateAPIView
+    ApplicationCreateAPIView, ApplicationListAPIView, CombinedPostRetrieve
 
 router = DefaultRouter()
 router.register(r'post-category', PostCategoryModelViewSet, basename='post_category')
@@ -16,7 +16,9 @@ urlpatterns = [
     path('update/', PersonalDataUpdateAPIView.as_view(), name='update'),
     # path('interests/', GetInterestsAPIView.as_view(), name='interests'),
     path('combined-posts/', CombinedPostAPIView.as_view(), name='combined_posts'),
+    path('combined-post-retrieve/<int:pk>/', CombinedPostRetrieve.as_view(), name='post_retrieve'),
     path('apply/', ApplicationCreateAPIView.as_view(), name='apply'),
+    path('app-list/', ApplicationListAPIView.as_view(), name='app-list'),
 ]
 
 urlpatterns += router.urls

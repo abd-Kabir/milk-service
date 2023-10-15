@@ -147,6 +147,7 @@ class PostCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PostCategory
         fields = ['id',
+                  'created_at',
                   'category',
                   'subcategory',
                   'age',
@@ -183,6 +184,7 @@ class PostCatalogSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostCatalog
         fields = ['id',
+                  'created_at',
                   'catalog',
                   'subcatalog',
                   'volume',
@@ -218,6 +220,7 @@ class PostServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostService
         fields = ['id',
+                  'created_at',
                   'service',
                   'subservice',
                   'price',
@@ -272,6 +275,17 @@ class PostServiceCombineSerializer(serializers.ModelSerializer):
                   'title_ru',
                   'title_en',
                   'photo', ]
+
+
+class ApplicationListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ['id',
+                  'created_at',
+                  'app_type',
+                  'status',
+                  'phone_number',
+                  'buyer', ]
 
 
 class ApplicationCreateSerializer(serializers.ModelSerializer):
