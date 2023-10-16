@@ -1,13 +1,11 @@
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers, status
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.administration.models import Category, Catalog, Service
-from apps.authentication.models import User, UserLegalEntity, UserIndividual
+from apps.authentication.models import User, UserLegalEntity, UserIndividual, UserBuyer
 from apps.tools.models import Region, District, CompanyType
 from apps.tools.utils.jwt_token_data import categories
-from config.utils.api_exceptions import APIValidation
 
 
 class JWTObtainPairSerializer(TokenObtainPairSerializer):
@@ -54,6 +52,7 @@ class BuyerSignUpSerializer(serializers.Serializer):
                                    middle_name=middle_name,
                                    is_active=False)
         user.groups.add(group)
+        UserBuyer.objects.create(user=user)
         return user
 
 

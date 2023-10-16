@@ -195,9 +195,9 @@ class SignUpInterestsAPIView(APIView):
             refresh['group'] = group.name
             if user_type:
                 datas = categories(user_type)
-                refresh['category'] = list(category_data)
-                refresh['catalog'] = list(catalog_data)
-                refresh['service'] = list(service_data)
+                refresh['category'] = datas.get('category_data')
+                refresh['catalog'] = datas.get('catalog_data')
+                refresh['service'] = datas.get('service_data')
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token)
