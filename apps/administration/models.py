@@ -151,7 +151,7 @@ class VetSubCategory(BaseDatesModel):
     description_ru = models.TextField()
     description_en = models.TextField()
     address = models.TextField()
-    phone_number = models.CharField(max_length=20, unique=True)
+    phone_number = models.CharField(max_length=20)
     price = models.CharField(max_length=20)
     organization_name = models.CharField(max_length=255, null=True, blank=True)
     file = models.FileField(upload_to=hash_filename, null=True, blank=True)

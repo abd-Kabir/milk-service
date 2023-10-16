@@ -166,3 +166,13 @@ class VetSubCategoryModelViewSet(ModelViewSet):
     serializer_class = VetSubCategorySerializer
     parser_classes = (MultiPartParser,)
     permission_classes = [LandingPage, ]
+
+
+class VetCategorySubListAPIView(ListAPIView):
+    serializer_class = VetSubCategorySerializer
+    parser_classes = (MultiPartParser,)
+    permission_classes = [AllowAny, ]
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']  # Get the category_id from the URL parameter
+        return VetSubCategory.objects.filter(vet_category=category_id)
