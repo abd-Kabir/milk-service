@@ -158,7 +158,6 @@ class ScienceModelViewSet(ModelViewSet):
 class VetCategoryModelViewSet(ModelViewSet):
     queryset = VetCategory.objects.all()
     serializer_class = VetCategorySerializer
-    parser_classes = (MultiPartParser,)
     permission_classes = [LandingPage, ]
 
 
