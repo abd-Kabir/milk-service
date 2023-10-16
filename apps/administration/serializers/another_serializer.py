@@ -169,7 +169,9 @@ class VetCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = VetCategory
         fields = ['id',
-                  'category_name', ]
+                  'name_uz',
+                  'name_ru',
+                  'name_en', ]
 
 
 class VetSubCategorySerializer(serializers.ModelSerializer):

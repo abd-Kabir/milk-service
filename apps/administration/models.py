@@ -135,7 +135,9 @@ class Science(BaseDatesModel):
 
 
 class VetCategory(BaseDatesModel):
-    category_name = models.CharField(max_length=255)
+    name_uz = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
 
     class Meta:
         db_table = 'VetCategory'
