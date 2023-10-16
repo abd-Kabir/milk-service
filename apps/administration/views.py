@@ -124,7 +124,7 @@ class GetServiceTypesAPIView(APIView):
 
 # News
 class NewsModelViewSet(ModelViewSet):
-    queryset = News.objects.all()
+    queryset = News.objects.order_by('-id')
     serializer_class = NewsSerializer
     parser_classes = (MultiPartParser,)
     permission_classes = [LandingPage, ]
