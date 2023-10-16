@@ -69,12 +69,15 @@ class BuyerSignUpFinalSerializer(serializers.Serializer):
         district = validated_data.get('district')
 
         user = get_object_or_404(User, username=username)
-        user.set_password(password)
-        user.save()
 
         user.user_buyer.region = region
         user.user_buyer.district = district
         user.user_buyer.save()
+
+        user.set_password(password)
+        user.is_active = True
+        user.save()
+
         return user
 
 
