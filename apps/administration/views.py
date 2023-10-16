@@ -181,5 +181,7 @@ class VetCategorySubListAPIView(ListAPIView):
     permission_classes = [AllowAny, ]
 
     def get_queryset(self):
-        category_id = self.kwargs['category_id']  # Get the category_id from the URL parameter
+        category_id = self.kwargs['category_id']
+        if category_id == 0 or category_id == '0':
+            return [VetSubCategory.objects.order_by('-pk').first()]
         return VetSubCategory.objects.filter(vet_category=category_id)
