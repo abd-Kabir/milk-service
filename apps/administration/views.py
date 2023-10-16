@@ -158,7 +158,6 @@ class ScienceModelViewSet(ModelViewSet):
 class FAQModelViewSet(ModelViewSet):
     queryset = FAQ.objects.all()
     serializer_class = FAQSerializer
-    parser_classes = (MultiPartParser,)
     permission_classes = [LandingPage, ]
 
 
