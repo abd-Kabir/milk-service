@@ -73,7 +73,8 @@ class PersonalDataUpdateAPIView(UpdateAPIView):
         elif hasattr(user, 'user_buyer'):
             return UserBuyerPersonalDataSerializer(args[0], data=kwargs['data'], partial=True)
         else:
-            raise APIValidation("Bad request", status_code=status.HTTP_400_BAD_REQUEST)
+            raise APIValidation("This user is not an individual, legal entity or buyer",
+                                status_code=status.HTTP_400_BAD_REQUEST)
 
     def get_object(self):
         if self.request.user.is_authenticated:
