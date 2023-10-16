@@ -155,6 +155,7 @@ class VetSubCategory(BaseDatesModel):
     price = models.CharField(max_length=20)
     organization_name = models.CharField(max_length=255, null=True, blank=True)
     file = models.FileField(upload_to=hash_filename, null=True, blank=True)
+    photo = models.FileField(upload_to=hash_filename, null=True, blank=True)
 
     vet_category = models.ForeignKey(VetCategory, on_delete=models.CASCADE, related_name='vet_subcategory')
 
