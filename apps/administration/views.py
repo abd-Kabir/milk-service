@@ -7,10 +7,10 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner, SubService, \
-    AboutUs, Science, VetCategory, VetSubCategory
+    AboutUs, Science, VetCategory, VetSubCategory, FAQ
 from apps.administration.serializers.another_serializer import UserAdminSerializer, UserAdminGetSerializer, \
     UserAdminRolesSerializer, NewsSerializer, BannerSerializer, AboutUsSerializer, ScienceSerializer, \
-    VetCategorySerializer, VetSubCategorySerializer
+    VetCategorySerializer, VetSubCategorySerializer, FAQSerializer
 from apps.administration.serializers.catalog_serializer import CatalogSerializer, SubCatalogSerializer, \
     SubCatalogGetSerializer, CatalogSubCatalogSerializer
 from apps.administration.serializers.category_serializer import CategorySerializer, SubCategorySerializer, \
@@ -150,6 +150,14 @@ class AboutUsModelViewSet(ModelViewSet):
 class ScienceModelViewSet(ModelViewSet):
     queryset = Science.objects.all()
     serializer_class = ScienceSerializer
+    parser_classes = (MultiPartParser,)
+    permission_classes = [LandingPage, ]
+
+
+# FAQ
+class FAQModelViewSet(ModelViewSet):
+    queryset = FAQ.objects.all()
+    serializer_class = FAQSerializer
     parser_classes = (MultiPartParser,)
     permission_classes = [LandingPage, ]
 

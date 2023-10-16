@@ -161,3 +161,15 @@ class VetSubCategory(BaseDatesModel):
 
     class Meta:
         db_table = 'VetSubCategory'
+
+
+class FAQ(BaseDatesModel):
+    question_uz = models.CharField(max_length=255)
+    question_ru = models.CharField(max_length=255)
+    question_en = models.CharField(max_length=255)
+    answer_uz = models.TextField()
+    answer_ru = models.TextField()
+    answer_en = models.TextField()
+
+    class Meta:
+        db_table = 'FAQ'
