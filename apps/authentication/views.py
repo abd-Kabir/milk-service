@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.administration.models import SubCategory, SubCatalog, SubService, Category
+from apps.administration.models import SubCategory, SubCatalog, SubService, Category, Catalog, Service
 from apps.authentication.models import User, VerifyCode
 from apps.authentication.serializer import JWTObtainPairSerializer, SignUpPersonalDataSerializer, \
     SignUpIndividualAuthSerializer, SignUpEntityAuthSerializer, BuyerSignUpSerializer, BuyerSignUpFinalSerializer
@@ -203,14 +203,14 @@ class SignUpInterestsAPIView(APIView):
                     category['subcategory'] = interested_subcategory
 
                 catalog_ids = list(user_type.subcatalog.values_list('catalog', flat=True).distinct())
-                catalog_data = Category.objects.filter(id__in=catalog_ids).values('id', 'name_uz',
-                                                                                  'name_ru', 'name_en')
+                catalog_data = Catalog.objects.filter(id__in=catalog_ids).values('id', 'name_uz',
+                                                                                 'name_ru', 'name_en')
                 for catalog in catalog_data:
                     catalog['subcatalog'] = interested_subcatalog
 
                 service_ids = list(user_type.subservice.values_list('service', flat=True).distinct())
-                service_data = Category.objects.filter(id__in=service_ids).values('id', 'name_uz',
-                                                                                  'name_ru', 'name_en')
+                service_data = Service.objects.filter(id__in=service_ids).values('id', 'name_uz',
+                                                                                 'name_ru', 'name_en')
                 for service in service_data:
                     service['subservice'] = interested_subservice
                 refresh['category'] = list(category_data)

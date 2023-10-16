@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers, status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.administration.models import Category
+from apps.administration.models import Category, Catalog, Service
 from apps.authentication.models import User, UserLegalEntity, UserIndividual
 from apps.tools.models import Region, District, CompanyType
 from config.utils.api_exceptions import APIValidation
@@ -36,14 +36,14 @@ class JWTObtainPairSerializer(TokenObtainPairSerializer):
                     category['subcategory'] = interested_subcategory
 
                 catalog_ids = list(user_type.subcatalog.values_list('catalog', flat=True).distinct())
-                catalog_data = Category.objects.filter(id__in=catalog_ids).values('id', 'name_uz',
-                                                                                  'name_ru', 'name_en')
+                catalog_data = Catalog.objects.filter(id__in=catalog_ids).values('id', 'name_uz',
+                                                                                 'name_ru', 'name_en')
                 for catalog in catalog_data:
                     catalog['subcatalog'] = interested_subcatalog
 
                 service_ids = list(user_type.subservice.values_list('service', flat=True).distinct())
-                service_data = Category.objects.filter(id__in=service_ids).values('id', 'name_uz',
-                                                                                  'name_ru', 'name_en')
+                service_data = Service.objects.filter(id__in=service_ids).values('id', 'name_uz',
+                                                                                 'name_ru', 'name_en')
                 for service in service_data:
                     service['subservice'] = interested_subservice
                 token['category'] = list(category_data)
