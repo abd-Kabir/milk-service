@@ -26,25 +26,28 @@ class JWTObtainPairSerializer(TokenObtainPairSerializer):
             elif hasattr(user, 'user_individual'):
                 user_type = user.user_individual
             if user_type:
-                interested_subservice = list(user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en'))
-                interested_subcatalog = list(user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en'))
-                interested_subcategory = list(user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en'))
+                interested_subservice = user_type.subservice.values('id', 'name_uz', 'name_ru', 'name_en', 'service')
+                interested_subcatalog = user_type.subcatalog.values('id', 'name_uz', 'name_ru', 'name_en', 'catalog')
+                interested_subcategory = user_type.subcategory.values('id', 'name_uz', 'name_ru', 'name_en', 'category')
                 category_ids = list(user_type.subcategory.values_list('category', flat=True).distinct())
                 category_data = Category.objects.filter(id__in=category_ids).values('id', 'name_uz',
                                                                                     'name_ru', 'name_en')
                 for category in category_data:
+                    interested_subcategory = interested_subcategory.filter(category=category.get('id'))
                     category['subcategory'] = interested_subcategory
 
                 catalog_ids = list(user_type.subcatalog.values_list('catalog', flat=True).distinct())
                 catalog_data = Catalog.objects.filter(id__in=catalog_ids).values('id', 'name_uz',
                                                                                  'name_ru', 'name_en')
                 for catalog in catalog_data:
+                    interested_subcatalog = interested_subcatalog.filter(catalog=catalog.get('id'))
                     catalog['subcatalog'] = interested_subcatalog
 
                 service_ids = list(user_type.subservice.values_list('service', flat=True).distinct())
                 service_data = Service.objects.filter(id__in=service_ids).values('id', 'name_uz',
                                                                                  'name_ru', 'name_en')
                 for service in service_data:
+                    interested_subservice = interested_subservice.filter(service=service.get('id'))
                     service['subservice'] = interested_subservice
                 token['category'] = list(category_data)
                 token['catalog'] = list(catalog_data)
