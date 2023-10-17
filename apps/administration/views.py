@@ -7,10 +7,10 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from apps.administration.models import Category, SubCategory, Catalog, SubCatalog, Service, News, Banner, SubService, \
-    AboutUs, Science, VetCategory, VetSubCategory, FAQ
+    AboutUs, Science, VetCategory, VetSubCategory, FAQ, HintCategory, HintSubCategory
 from apps.administration.serializers.another_serializer import UserAdminSerializer, UserAdminGetSerializer, \
     UserAdminRolesSerializer, NewsSerializer, BannerSerializer, AboutUsSerializer, ScienceSerializer, \
-    VetCategorySerializer, VetSubCategorySerializer, FAQSerializer
+    VetCategorySerializer, VetSubCategorySerializer, FAQSerializer, HintCategorySerializer, HintSubCategorySerializer
 from apps.administration.serializers.catalog_serializer import CatalogSerializer, SubCatalogSerializer, \
     SubCatalogGetSerializer, CatalogSubCatalogSerializer
 from apps.administration.serializers.category_serializer import CategorySerializer, SubCategorySerializer, \
@@ -185,3 +185,29 @@ class VetCategorySubListAPIView(ListAPIView):
         if category_id == 0 or category_id == '0':
             return [VetSubCategory.objects.order_by('-pk').first()]
         return VetSubCategory.objects.filter(vet_category=category_id)
+
+
+# Hint
+class HintCategoryModelViewSet(ModelViewSet):
+    queryset = HintCategory.objects.all()
+    serializer_class = HintCategorySerializer
+    permission_classes = [LandingPage, ]
+
+
+class HintSubCategoryModelViewSet(ModelViewSet):
+    queryset = HintSubCategory.objects.all()
+    serializer_class = HintSubCategorySerializer
+    parser_classes = (MultiPartParser,)
+    permission_classes = [LandingPage, ]
+
+
+class HintCategorySubListAPIView(ListAPIView):
+    serializer_class = HintSubCategorySerializer
+    parser_classes = (MultiPartParser,)
+    permission_classes = [AllowAny, ]
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        if category_id == 0 or category_id == '0':
+            return [HintSubCategory.objects.order_by('-pk').first()]
+        return HintSubCategory.objects.filter(hint_category=category_id)

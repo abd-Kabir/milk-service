@@ -173,3 +173,28 @@ class FAQ(BaseDatesModel):
 
     class Meta:
         db_table = 'FAQ'
+
+
+class HintCategory(BaseDatesModel):
+    title_uz = models.CharField(max_length=255)
+    title_ru = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'HintCategory'
+
+
+class HintSubCategory(BaseDatesModel):
+    title_uz = models.CharField(max_length=255)
+    title_ru = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    description_uz = models.TextField()
+    description_ru = models.TextField()
+    description_en = models.TextField()
+    photo = models.FileField(upload_to=hash_filename, null=True, blank=True)
+    video = models.FileField(upload_to=hash_filename, null=True, blank=True)
+
+    vet_category = models.ForeignKey(HintCategory, on_delete=models.CASCADE, related_name='vet_subcategory')
+
+    class Meta:
+        db_table = 'HintSubCategory'

@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 from apps.administration.views import UserAdminModelViewSet, UserAdminRolesListAPIView, CategoryModelViewSet, \
     SubCategoryModelViewSet, CatalogModelViewSet, SubCatalogModelViewSet, ServiceModelViewSet, NewsModelViewSet, \
     BannerModelViewSet, GetCatTypesAPIView, SubServiceModelViewSet, GetServiceTypesAPIView, AboutUsModelViewSet, \
-    ScienceModelViewSet, VetSubCategoryModelViewSet, VetCategoryModelViewSet, VetCategorySubListAPIView, FAQModelViewSet
+    ScienceModelViewSet, VetSubCategoryModelViewSet, VetCategoryModelViewSet, VetCategorySubListAPIView, \
+    FAQModelViewSet, HintSubCategoryModelViewSet, HintCategoryModelViewSet, HintCategorySubListAPIView
 
 router = DefaultRouter()
 router.register(r'admin-user', UserAdminModelViewSet, basename='admin_user')
@@ -21,6 +22,10 @@ router.register(r'science', ScienceModelViewSet, basename='science')
 router.register(r'faq', FAQModelViewSet, basename='faq')
 router.register(r'vet-category', VetCategoryModelViewSet, basename='vet_category')
 router.register(r'vet-subcategory', VetSubCategoryModelViewSet, basename='vet_subcategory')
+router.register(r'vet-subcategory', VetSubCategoryModelViewSet, basename='vet_subcategory')
+router.register(r'vet-subcategory', VetSubCategoryModelViewSet, basename='vet_subcategory')
+router.register(r'hint-subcategory', HintCategoryModelViewSet, basename='hint_subcategory')
+router.register(r'hint-subcategory', HintSubCategoryModelViewSet, basename='hint_subcategory')
 
 app_name = 'administration'
 urlpatterns = [
@@ -28,6 +33,7 @@ urlpatterns = [
     path('cat-types/', GetCatTypesAPIView.as_view(), name='cat_types'),
     path('service-types/', GetServiceTypesAPIView.as_view(), name='service_types'),
     path('vet-child/<int:category_id>/', VetCategorySubListAPIView.as_view(), name='vet_child'),
+    path('hint-child/<int:category_id>/', HintCategorySubListAPIView.as_view(), name='hint_child'),
 ]
 
 urlpatterns += router.urls

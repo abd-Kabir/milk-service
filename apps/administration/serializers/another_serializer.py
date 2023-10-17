@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group
 from rest_framework import serializers, status
 
 from apps.administration.models import UserAdministration, News, Banner, AboutUs, Science, VetCategory, VetSubCategory, \
-    FAQ
+    FAQ, HintSubCategory, HintCategory
 from apps.authentication.models import User
 from config.utils.api_exceptions import APIValidation
 
@@ -185,4 +185,20 @@ class VetCategorySerializer(serializers.ModelSerializer):
 class VetSubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = VetSubCategory
+        fields = '__all__'
+
+
+# Vet
+class HintCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HintCategory
+        fields = ['id',
+                  'title_uz',
+                  'title_ru',
+                  'title_en', ]
+
+
+class HintSubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HintSubCategory
         fields = '__all__'
