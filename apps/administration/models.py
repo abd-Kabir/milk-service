@@ -192,7 +192,7 @@ class HintSubCategory(BaseDatesModel):
     description_ru = models.TextField()
     description_en = models.TextField()
     photo = models.FileField(upload_to=hash_filename, null=True, blank=True)
-    video = models.FileField(upload_to=hash_filename, null=True, blank=True)
+    video = models.URLField(max_length=255, null=True, blank=True)
 
     vet_category = models.ForeignKey(HintCategory, on_delete=models.CASCADE, related_name='vet_subcategory')
 
