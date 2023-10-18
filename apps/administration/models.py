@@ -194,7 +194,7 @@ class HintSubCategory(BaseDatesModel):
     photo = models.FileField(upload_to=hash_filename, null=True, blank=True)
     video = models.URLField(max_length=255, null=True, blank=True)
 
-    vet_category = models.ForeignKey(HintCategory, on_delete=models.CASCADE, related_name='vet_subcategory')
+    hint_category = models.ForeignKey(HintCategory, on_delete=models.CASCADE, related_name='vet_subcategory')
 
     class Meta:
         db_table = 'HintSubCategory'

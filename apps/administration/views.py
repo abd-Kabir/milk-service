@@ -222,4 +222,4 @@ class HintCategorySubListAPIView(ListAPIView):
         category_id = self.kwargs['category_id']
         if category_id == 0 or category_id == '0':
             return [HintSubCategory.objects.order_by('-pk').first()]
-        return HintSubCategory.objects.filter(hint_category=category_id)
+        return HintSubCategory.objects.filter(hint_category_id=category_id)
