@@ -22,9 +22,7 @@ router.register(r'science', ScienceModelViewSet, basename='science')
 router.register(r'faq', FAQModelViewSet, basename='faq')
 router.register(r'vet-category', VetCategoryModelViewSet, basename='vet_category')
 router.register(r'vet-subcategory', VetSubCategoryModelViewSet, basename='vet_subcategory')
-router.register(r'vet-subcategory', VetSubCategoryModelViewSet, basename='vet_subcategory')
-router.register(r'vet-subcategory', VetSubCategoryModelViewSet, basename='vet_subcategory')
-router.register(r'hint-subcategory', HintCategoryModelViewSet, basename='hint_subcategory')
+router.register(r'hint-category', HintCategoryModelViewSet, basename='hint_category')
 router.register(r'hint-subcategory', HintSubCategoryModelViewSet, basename='hint_subcategory')
 
 app_name = 'administration'
