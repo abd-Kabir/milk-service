@@ -251,6 +251,8 @@ class VerifyPWAPIViewAPIView(APIView):
 
 
 class NewPWAPIView(APIView):
+    permission_classes = [AllowAny, ]
+
     def post(self, request):
         email_or_phone = request.data.get('contact')
         password = request.data.get('password')
