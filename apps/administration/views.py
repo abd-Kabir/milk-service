@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
@@ -19,6 +20,7 @@ from apps.administration.serializers.service_serializer import ServiceSerializer
     SubServiceGetSerializer, ServiceSubServiceSerializer
 
 from apps.authentication.models import User
+from config.utils.api_exceptions import APIValidation
 from config.utils.permissions import LandingPage
 
 
@@ -180,6 +182,11 @@ class VetCategorySubListAPIView(ListAPIView):
     parser_classes = (MultiPartParser,)
     permission_classes = [AllowAny, ]
 
+    def get_serializer(self, *args, **kwargs):
+        if None in args[0]:
+            raise APIValidation("No data found", status_code=status.HTTP_404_NOT_FOUND)
+        return super().get_serializer(*args, **kwargs)
+
     def get_queryset(self):
         category_id = self.kwargs['category_id']
         if category_id == 0 or category_id == '0':
@@ -205,6 +212,11 @@ class HintCategorySubListAPIView(ListAPIView):
     serializer_class = HintSubCategorySerializer
     parser_classes = (MultiPartParser,)
     permission_classes = [AllowAny, ]
+
+    def get_serializer(self, *args, **kwargs):
+        if None in args[0]:
+            raise APIValidation("No data found", status_code=status.HTTP_404_NOT_FOUND)
+        return super().get_serializer(*args, **kwargs)
 
     def get_queryset(self):
         category_id = self.kwargs['category_id']
