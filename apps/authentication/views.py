@@ -116,15 +116,8 @@ class SignUpVerifyCodeAPIView(APIView):
 
             user = verify_obj.user
             if user == email_user:
-                # user.is_active = True
-                # user.save()
                 verify_obj.delete()
-
-                # refresh = RefreshToken.for_user(user)
-                # refresh['username'] = user.username
                 return Response({
-                    # 'refresh': str(refresh),
-                    # 'access': str(refresh.access_token)
                     'detail': 'Successfully verified',
                     'status': status.HTTP_200_OK
                 })
@@ -172,9 +165,6 @@ class SignUpInterestsAPIView(APIView):
             user_type = user.user_entity
         elif hasattr(user, "user_individual"):
             user_type = user.user_individual
-        # user_type.subcategory.add(SubCategory.objects.filter(id__in=request.data.get('subcategory_list')))
-        # user_type.subcatalog.add(SubCatalog.objects.filter(id__in=request.data.get('subcatalog_list')))
-        # user_type.subservice.add(SubService.objects.filter(id__in=request.data.get('subservice_list')))
         if request.data.get('subcategory_list'):
             user_type.subcategory.add(*request.data.get('subcategory_list'))
         if request.data.get('subcatalog_list'):
